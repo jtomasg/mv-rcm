@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class AgenciaVO implements Serializable {
 
-	private static final long serialVersionUID = 3211475637527354243L;
+	private static final long serialVersionUID = 211475637527354243L;
 	private Integer id;
 	private String descripcion;
 
