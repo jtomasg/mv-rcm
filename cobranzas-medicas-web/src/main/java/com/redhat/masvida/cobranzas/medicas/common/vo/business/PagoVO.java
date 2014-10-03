@@ -20,7 +20,7 @@ public class PagoVO implements Serializable {
 		this.agenciaPago = new AgenciaVO();
 		this.convenioPago = "";
 	}
-
+/****************** cambio ***********************/
 	public CobradorVO getCobrador() {
 		return cobrador;
 	}
