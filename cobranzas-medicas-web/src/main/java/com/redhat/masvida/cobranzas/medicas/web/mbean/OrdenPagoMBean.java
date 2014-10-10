@@ -72,6 +72,20 @@ public class OrdenPagoMBean extends BaseManagedBean implements Serializable {
 			this.ordenes.add(this.ordenes.size(), vo);
 		}
 	}
+	
+	public void eliminarOA(AjaxBehaviorEvent event) {
+	//Verificamos la ROW ID correspondiente
+		Integer rowIndex = (Integer) event.getComponent().getAttributes()
+				.get("rowIndexId");
+		LOG.info("A Eliminar Fila: "+rowIndex+" con Valor: "+rowIndex.intValue());
+		
+		//Desvinculamos la OA del RCM
+		this.ordenes.remove(rowIndex.intValue());
+		actualizarDatosResumen();
+		if(this.ordenes.size()<=0){
+		 agregarNuevaOrdenAlFinal();
+		}
+	}
 
 	public void actualizarDatosResumen() {
 		this.totalBonificacion = 0;
@@ -114,21 +128,17 @@ public class OrdenPagoMBean extends BaseManagedBean implements Serializable {
 					FacesMessage.SEVERITY_ERROR);
 		} catch (FolioOrdeAtencionNoEncontradoException foane) {
 			// significa que se va a agregar uno
-			agregarNuevaOrdenAlFinal();
+			//agregarNuevaOrdenAlFinal();
 		}
 	}
 	
-	public void addRowLastColumn(AjaxBehaviorEvent event) {
-			// Verificamos que sea integer
-			Integer rowIndex = (Integer) event.getComponent().getAttributes()
-					.get("rowIndexId");
-
-			// finalmente , si encuentra algo arreglamos la lista para crear un
-			// nuevo item
-			if(rowIndex!=null){
+	/*
+	 * Método para agregar Fila a la Tabla de Ordenes de Atención.
+	 * */
+	public void addRowLastColumn() {
+	LOG.info("Añadiendo nueva OA a la tabla...");
 			agregarNuevaOrdenAlFinal();
-			actualizarDatosResumen();
-			}
+			//actualizarDatosResumen();
 	}
 
 	public void setClient(FuseRestClient client) {
@@ -166,4 +176,5 @@ public class OrdenPagoMBean extends BaseManagedBean implements Serializable {
 	public void setOrdenes(List<OrdenAtencionVO> ordenes) {
 		this.ordenes = ordenes;
 	}
+
 }

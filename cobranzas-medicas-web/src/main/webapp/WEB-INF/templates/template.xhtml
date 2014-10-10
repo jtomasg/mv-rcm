@@ -8,6 +8,19 @@
 <h:head>
 	<title>Hands On Más Vida</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script>
+    function getId(){
+    var p = document.getElementById('formGralId:folioId').value;
+    idEdicion(p);
+        }
+	</script>
+	<script>
+    function setFocus(e){
+        var newrow = e+1;
+        var p = $('tr#formGralId\\:ordenesTableId\\:'+newrow+'\\:n')
+        $(p).find('.tabFocusable').focus();
+        }
+	</script>
 </h:head>
 <h:body>
 

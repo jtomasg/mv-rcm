@@ -10,6 +10,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Inject;
 
@@ -49,6 +50,8 @@ public class CobradorMBean extends BaseManagedBean implements Serializable {
 	private boolean nuevoFolio;
 	private AgenciaVO preselectedAgencia;
 	private TipoPagoVO preselectedTipoPago;
+	private boolean found;
+	
 
 	@ManagedProperty("#{agenciaMBean}")
 	private AgenciaMBean agenciaMBean;
@@ -130,6 +133,7 @@ public class CobradorMBean extends BaseManagedBean implements Serializable {
 	
 	public void eliminar() {
 		try {
+			System.out.println("Eliminando el RCM con ID: "+this.rcm.getFolio());
 			client.deleteRcm(this.rcm, pago, ordenPagoMBean.getOrdenes());
 			prepareNuevo();
 			
@@ -189,7 +193,8 @@ public class CobradorMBean extends BaseManagedBean implements Serializable {
 		this.pago.setAgenciaPago(ag);
 	}
 	
-	public void resolveRcm(AjaxBehaviorEvent event) {
+	public void resolveRcm() {
+		System.out.println("Buscando el RCM con ID para editar: "+this.rcm.getFolio());
 		RcmVO rcmVO = client.findFolio(this.rcm.getFolio());
 		try {
 			this.rcm = rcmVO.getRcm();
@@ -204,17 +209,41 @@ public class CobradorMBean extends BaseManagedBean implements Serializable {
 			this.rcm.setFolio(oldFOlio);
 		}
 	}
+	
+	public void findRcm(AjaxBehaviorEvent event) {
+		System.out.println("Buscando el RCM con ID: "+this.rcm.getFolio());
+		this.found = false;
+		RcmVO rcmVO = client.findFolio(this.rcm.getFolio());
+		try {
+			this.rcm = rcmVO.getRcm();
+			if(this.rcm!=null){
+			this.found = true;
+			}
+		} catch (Exception ex) {// Si cae aca es por que el folio es nuevo
+		}
+	}
 
 	public void guardarRcm() {
+		//Verificamos folio RCM para ver que esta pasando
+		System.out.println("Guardando el RCM con ID: "+this.rcm.getFolio());
+		if(this.rcm.getFolio()!=null){
 		client.guardarRcm(this.rcm, this.pago, ordenPagoMBean.getOrdenes());
 
 		// TODO: metodo cliente para guardar todo
-		JsfUtil.addMessage(null, "Operación exitosa",
-				"Los datos se han registrados exitosamente",
+		JsfUtil.addMessage(null, "Operación exitosa:",
+				" Los datos se han registrado exitosamente",
 				FacesMessage.SEVERITY_INFO);
 		this.nuevoFolio = false;
+		}
+		else{
+			//TODO Desglosar mensajes de campos faltantes
+			JsfUtil.addMessage(null, "Operación Fallida:",
+					" Se han detectado campo(s) no completados. Revisar RCM.",
+					FacesMessage.SEVERITY_ERROR);
+			//this.nuevoFolio = false;	
+		}
 	}
-
+	
 	public void setClient(FuseRestClient client) {
 		this.client = client;
 	}
@@ -269,6 +298,14 @@ public class CobradorMBean extends BaseManagedBean implements Serializable {
 
 	public void setTipoPagoSelection(Collection<Object> tipoPagoSelection) {
 		this.tipoPagoSelection = tipoPagoSelection;
+	}
+
+	public boolean isFound() {
+		return found;
+	}
+
+	public void setFound(boolean found) {
+		this.found = found;
 	}
 
 }

@@ -5,7 +5,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
-
+	
 <body>
 	<ui:composition template="/WEB-INF/templates/template.xhtml">
 		<ui:define name="title">Más Vida</ui:define>
@@ -35,11 +35,12 @@
 							<h:inputText id="folioId" value="#{cobradorMBean.rcm.folio}"
 								required="true" label="Folio"
 								disabled="#{!cobradorMBean.nuevoFolio}" size="6">
-								<a4j:ajax event="change" listener="#{cobradorMBean.resolveRcm}"
-									execute="@this" render="@form" />
-								<a4j:ajax event="keyup"
+								<rich:validator />
+								<a4j:ajax event="change" listener="#{cobradorMBean.findRcm}"
+									execute="@this" render="@form" oncomplete="if(#{cobradorMBean.found == true}){ #{rich:component('confirmacionEditarPopupId')}.show()}"/>
+								<a4j:ajax event="blur"
 									onbeforesubmit="event.preventDefault(); if (event.keyCode != 13) { return false;}"
-									listener="#{cobradorMBean.resolveRcm}" execute="@this"
+									listener="#{cobradorMBean.findRcm}" execute="@this" oncomplete="if(#{cobradorMBean.found == true}){ #{rich:component('confirmacionEditarPopupId')}.show()}"
 									render="@form" />
 							</h:inputText>
 
@@ -59,7 +60,7 @@
 							<h:column>
 								<h:inputText id="agenciaRecId" size="3" required="true"
 									label="Agencia Recepción" autocomplete="off"
-									value="#{cobradorMBean.rcm.agenciaRecepcion.id}">
+									value="#{cobradorMBean.rcm.agenciaRecepcion.id}" onkeydown="if(event.keyCode == 120){#{rich:component(':agenciasPopupId')}.show();}">
 									<a4j:ajax event="change"
 										oncomplete="if (#{facesContext.maximumSeverity != null}) {#{rich:component(':messagesPopup')}.show();}"
 										listener="#{cobradorMBean.resolveAgencia}" execute="@this"
@@ -115,7 +116,7 @@
 							<h:column>
 								<h:inputText id="tipoPagoId" size="3" required="true"
 									label="Código Tipo de Pago" autocomplete="off"
-									value="#{cobradorMBean.pago.tipoPago.id}">
+									value="#{cobradorMBean.pago.tipoPago.id}" onkeydown="if(event.keyCode == 119){#{rich:component(':tipoPagoPopupId')}.show();}">
 									<a4j:ajax event="change"
 										oncomplete="if (#{facesContext.maximumSeverity != null}) {#{rich:component(':messagesPopup')}.show();}"
 										listener="#{cobradorMBean.resolveTipoPago}" execute="@this"
@@ -161,6 +162,10 @@
 
 					<rich:panel header="Órdenes de atención pagadas"
 						id="formOrdenPagoId">
+						<div style="position:relative; bottom: 5px;"><a4j:commandButton value="Agregar OA" immediate="true"
+								actionListener="#{ordenPagoMBean.addRowLastColumn()}" execute="formOrdenPagoId" oncomplete="setFocus(this.id);"
+								render="ordenesTableId cantidadOaId montoId descuentoId" />
+								</div>
 						<rich:extendedDataTable value="#{ordenPagoMBean.ordenes}"
 							columnClasses="column_ordenes" var="orden"
 							style="height:300px;" selectionMode="none" id="ordenesTableId"
@@ -169,11 +174,12 @@
 								<f:facet name="header">
 									<h:outputText value="Folio OA" />
 								</f:facet>
-								<h:inputText value="#{orden.folioOA}" readonly="#{loginMBean.userHO}">
+							    <rich:focus preserve="true" /> 
+								<h:inputText value="#{orden.folioOA}" readonly="#{loginMBean.userHO}" styleClass="tabFocusable">
 									<a4j:ajax event="keyup"
 										onbeforesubmit="event.preventDefault(); if (event.keyCode != 13) { return false;}"
 										listener="#{ordenPagoMBean.verificarFolioOA}" execute="formOrdenPagoId"
-										render="ordenesTableId cantidadOaId montoId descuentoId" />
+										render="ordenesTableId cantidadOaId montoId descuentoId"/>
 									<a4j:ajax event="change"
 										onbeforesubmit="event.preventDefault();"
 										listener="#{ordenPagoMBean.verificarFolioOA}" execute="formOrdenPagoId"
@@ -190,7 +196,7 @@
 									value="#{orden.fechaEmision}" datePattern="dd/MM/yyyy" >
 								</rich:calendar>
 							</rich:column>
-							<rich:column width="150px">
+							<rich:column width="150px"> 
 								<f:facet name="header">
 									<h:outputText value="Valor" />
 								</f:facet>
@@ -205,7 +211,7 @@
 								<f:facet name="header">
 									<h:outputText value="Copago" />
 								</f:facet>
-								<h:inputText readonly="#{loginMBean.userHO}" value="#{orden.copago}">
+								<h:inputText readonly="#{loginMBean.userHO}" value="#{orden.copago}"  >
 									<a4j:ajax value="change"
 										listener="#{ordenPagoMBean.actualizarDatosResumen}"
 										render="cantidadOaId montoId descuentoId ordenesTableId" />
@@ -240,20 +246,31 @@
 									<h:outputText value="Nombre Titular" />
 								</f:facet>
 								<h:inputText readonly="#{loginMBean.userHO}" value="#{orden.titular.nombre}">
-								<a4j:ajax event="keyup"
+								<a4j:ajax event="keypress"
+								        onbeforesubmit="event.preventDefault(); if (event.keyCode != 9) { return false;}"
 										listener="#{ordenPagoMBean.addRowLastColumn}" execute="formOrdenPagoId"
-										render="ordenesTableId cantidadOaId montoId descuentoId"/>
+										render="ordenesTableId cantidadOaId montoId descuentoId" oncomplete="setFocus(#{rowKeyVar});"/>
 									<a4j:ajax event="change"
 										listener="#{ordenPagoMBean.addRowLastColumn}" execute="formOrdenPagoId"
-										render="ordenesTableId cantidadOaId montoId descuentoId" />
+										render="ordenesTableId cantidadOaId montoId descuentoId"/>
 									<f:attribute name="rowIndexId" value="#{rowKeyVar}" />
 								</h:inputText>
 							</rich:column>
+							<rich:column width="30px">
+							<h:commandLink readonly="#{loginMBean.userHO}">
+							<h:graphicImage value="/resources/images/icons/deleteIcon.png" />
+									<a4j:ajax event="click"
+										onbeforesubmit="event.preventDefault();"
+										listener="#{ordenPagoMBean.eliminarOA}" execute="formOrdenPagoId"
+										render="ordenesTableId cantidadOaId montoId descuentoId" />
+									<f:attribute name="rowIndexId" value="#{rowKeyVar}" />
+								</h:commandLink>
+							</rich:column>
 						</rich:extendedDataTable>
-						<h:panelGrid columns="6">
+						<h:panelGrid columns="8">
 							<h:outputLabel value="Cantidad OA: " for="cantidadOaId" />
 							<h:inputText id="cantidadOaId" readonly="true"
-								value="#{ordenPagoMBean.ordenes.size() -1 }" />
+								value="#{ordenPagoMBean.ordenes.size()}" />
 							<h:outputLabel value="Monto: " for="montoId" />
 							<h:inputText id="montoId" value="#{ordenPagoMBean.totalvalor}"
 								readonly="true" />
@@ -263,19 +280,19 @@
 						</h:panelGrid>
 					</rich:panel>
 					
-					<h:commandButton value="Nuevo" onclick="if(#{cobradorMBean.nuevoFolio}){#{rich:component(':confirmacionGuardarCambiosPopupId')}.show()} else {#{cobradorMBean.prepareNuevo()}}" >
-					  <f:ajax immediate="true" render="@form :facesMessagesId" />
+					<h:commandButton value="Nuevo" onclick="if(#{cobradorMBean.nuevoFolio}){#{rich:component(':confirmacionGuardarCambiosPopupId')}.show()} else {#{cobradorMBean.prepareNuevo()}}" rendered="#{loginMBean.adminHO}">
+					  <f:ajax immediate="true" execute="@form" render="folioId :facesMessagesId" />
 					</h:commandButton>
 
 					<a4j:commandButton value="Eliminar"
 						onclick="#{rich:component(':confirmacionEliminarPopupId')}.show();" rendered="#{loginMBean.adminHO}"
-						immediate="true" render="@form :facesMessagesId">
-					</a4j:commandButton>
+				        immediate="true" render=":facesMessagesId">
+					</a4j:commandButton> 
 
 					<h:commandButton value="Grabar"
 						onclick="#{rich:component(':messagesPopup')}.show()"
 						actionListener="#{cobradorMBean.guardarRcm}" rendered="#{loginMBean.adminHO}">
-						<f:ajax immediate="true" execute="@form" render="@form folioId :facesMessagesId" />
+						<f:ajax immediate="true" execute="@form" render="folioId :facesMessagesId" />
 					</h:commandButton>
 					
 					<!--CONFIGURACIONES DE SOPORTE PARA FORMATEO EN EL LADO DEL CLIENTE -->
@@ -296,10 +313,14 @@
 					¿Está seguro que desea eliminar el registro?
 				</rich:panel>
 				<h:form>
-					<a4j:commandButton value="Sí"
-						actionListener="#{cobradorMBean.eliminar}" execute=":formGralId" render=":formGralId :facesMessagesId" oncomplete="#{rich:component('confirmacionEliminarPopupId')}.hide()"/>
+					<a4j:commandButton value="Sí" immediate="true" onclick="getId();"
+						actionListener="#{cobradorMBean.eliminar}" execute=":formGralId" render=":formGralId :facesMessagesId" oncomplete="#{rich:component('confirmacionEliminarPopupId')}.hide()">
+					<a4j:jsFunction name="idEdicion">
+					<a4j:param name="rcm_id" assignTo="#{cobradorMBean.rcm.folio}"></a4j:param>
+					</a4j:jsFunction>
+					</a4j:commandButton>
 					<a4j:commandButton value="No"
-						onclick="#{rich:component('confirmacionEliminarPopupId')}.hide()">
+						onclick="#{rich:component('confirmacionEliminarPopupId')}.hide();">
 					</a4j:commandButton>
 				</h:form>
 			</rich:popupPanel>
@@ -307,19 +328,21 @@
 			<!-- MENSAJE DE EDICION -->
 			<rich:popupPanel id="confirmacionEditarPopupId" autosized="true"
 				header="Advertencia"
-				onmaskclick="#{rich:component('confirmacionEliminarPopupId')}.hide()"
+				onmaskclick="#{rich:component('confirmacionEditarPopupId')}.hide()"
 				resizeable="false">
 
 				<rich:panel id="confirmacionEditarId">
 					Este RCM ya existe.¿Desea Editarla?
 				</rich:panel>
 				<h:form>
-					<h:commandButton value="Sí"
-						actionListener="#{cobradorMBean.resolveRcm()}">
-					</h:commandButton>
-					<h:commandButton value="No"
-						onclick="#{rich:component('confirmacionEditarPopupId')}.hide()">
-					</h:commandButton>
+					<a4j:commandButton value="Sí" onclick="getId();" actionListener="#{cobradorMBean.resolveRcm()}" immediate="true"
+									 render=":formGralId" oncomplete="#{rich:component('confirmacionEditarPopupId')}.hide();">
+					<a4j:jsFunction name="idEdicion">
+					<a4j:param name="rcm_id" assignTo="#{cobradorMBean.rcm.folio}"></a4j:param>
+					</a4j:jsFunction>
+					</a4j:commandButton>
+					<a4j:commandButton value="No" actionListener="#{cobradorMBean.prepareNuevo()}"
+					render=":formGralId" oncomplete="#{rich:component('confirmacionEditarPopupId')}.hide();"/>
 				</h:form>
 			</rich:popupPanel>
 			
@@ -337,11 +360,11 @@
 				    <a4j:commandButton value="Sí"
 						onclick="#{rich:component(':messagesPopup')}.show()"
 						actionListener="#{cobradorMBean.guardarRcm}"
-						execute=":formGralId" render=":formGralId:folioId :facesMessagesId" 
+						execute=":formGralId" render="formGralId:folioId :facesMessagesId"
 						oncomplete="#{rich:component('confirmacionGuardarCambiosPopupId')}.hide()">
 					</a4j:commandButton>
 					<a4j:commandButton value="No"
-						actionListener="#{cobradorMBean.prepareNuevo}"
+						actionListener="#{cobradorMBean.prepareNuevo()}"
 						immediate="true" render=":formGralId :facesMessagesId"
 						oncomplete="#{rich:component('confirmacionGuardarCambiosPopupId')}.hide()">
 					</a4j:commandButton>
@@ -355,7 +378,7 @@
 			
 			
 			<!-- Mensajes del Sistema y Otros Popups -->
-			<rich:popupPanel id="messagesPopup" modal="true" autosized="true"
+			<rich:popupPanel id="messagesPopup" modal="true" width="450" height="150"
 				onmaskclick="#{rich:component(':messagesPopup')}.hide()">
 				<f:facet name="header">
 					<h:outputText value="Mensajes del sistema" />
@@ -449,16 +472,7 @@
 				</h:outputLink>
 			</rich:popupPanel>
 			<!-- FIN DE LOS POPUPS -->
-
-			<!--CONFIGURACIONES DE HOTKEYS -->
-			<rich:hotKey key="f9"
-				onkeyup="#{rich:component(':agenciasPopupId')}.show();">
-			</rich:hotKey>
-			<rich:hotKey key="f8"
-				onkeyup="#{rich:component(':tipoPagoPopupId')}.show();">
-			</rich:hotKey>
-			<!-- FIN CONFIGURACION HOTKEYS -->
-
+			
 		</ui:define>
 	</ui:composition>
 </body>
