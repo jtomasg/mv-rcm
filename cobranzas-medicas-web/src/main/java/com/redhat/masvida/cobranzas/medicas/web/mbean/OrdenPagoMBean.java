@@ -74,35 +74,36 @@ public class OrdenPagoMBean extends BaseManagedBean implements Serializable {
 			this.ordenes.add(this.ordenes.size(), vo);
 		}
 	}
-	
+
 	public void eliminarOA(AjaxBehaviorEvent event) {
-	//Verificamos la ROW ID correspondiente
+		// Verificamos la ROW ID correspondiente
 		Integer rowIndex = (Integer) event.getComponent().getAttributes()
 				.get("rowIndexId");
-		LOG.info("A Eliminar Fila: "+rowIndex+" con Valor: "+rowIndex.intValue());
-		
-		Random r = new Random();
-		int rnumber = r.nextInt(2);
-		
-		try{
-	    //Simularemos una excepción a partir de un simble DivideByZero
-		int result = 10/rnumber; 
-		//Desvinculamos la OA del RCM
-		this.ordenes.remove(rowIndex.intValue());
-		actualizarDatosResumen();
-		this.errorFlag = false;
-		if(this.ordenes.size()<=0){
-		 agregarNuevaOrdenAlFinal();
-		}
-		}
-		catch(Exception e){
-		LOG.info("Simulando excepción...");
-		/*
-		 * Fijamos desde aquí el valor de flagError para crear las condiciones
-		 * necesarias para levantar el popup de error definido en el index.
-		 * Esto, dado a que JsfUtil.addMessage no está funcionando desde acá...
-		 * */
-		this.errorFlag = true;
+		LOG.info("A Eliminar Fila: " + rowIndex + " con Valor: "
+				+ rowIndex.intValue());
+
+		try {
+			// Simularemos una excepción a partir de un simble DivideByZero
+				Random r = new Random();
+				int rnumber = r.nextInt(2);
+				int result = 10 / rnumber;
+			
+			// Desvinculamos la OA del RCM
+			this.ordenes.remove(rowIndex.intValue());
+			actualizarDatosResumen();
+			this.errorFlag = false;
+			if (this.ordenes.size() <= 0) {
+				agregarNuevaOrdenAlFinal();
+			}
+		} catch (Exception e) {
+			LOG.info("Simulando excepción...");
+			/*
+			 * Fijamos desde aquí el valor de flagError para crear las
+			 * condiciones necesarias para levantar el popup de error definido
+			 * en el index. Esto, dado a que JsfUtil.addMessage no está
+			 * funcionando desde acá...
+			 */
+			this.errorFlag = true;
 		}
 	}
 
@@ -111,7 +112,8 @@ public class OrdenPagoMBean extends BaseManagedBean implements Serializable {
 		this.totalvalor = 0d;
 		this.valorCopago = 0d;
 		for (OrdenAtencionVO oa : this.ordenes) {
-			this.totalBonificacion += oa.getBonificacion() != null ? oa.getBonificacion() : 0;
+			this.totalBonificacion += oa.getBonificacion() != null ? oa
+					.getBonificacion() : 0;
 			this.totalvalor += oa.getValor() != null ? oa.getValor() : 0;
 			this.valorCopago += oa.getCopago() != null ? oa.getCopago() : 0;
 		}
@@ -137,7 +139,7 @@ public class OrdenPagoMBean extends BaseManagedBean implements Serializable {
 
 			// finalmente , si encuentra algo arreglamos la lista para crear un
 			// nuevo item
-			//agregarNuevaOrdenAlFinal();
+			// agregarNuevaOrdenAlFinal();
 			actualizarDatosResumen();
 
 		} catch (NumberFormatException nfe) {
@@ -147,17 +149,17 @@ public class OrdenPagoMBean extends BaseManagedBean implements Serializable {
 					FacesMessage.SEVERITY_ERROR);
 		} catch (FolioOrdeAtencionNoEncontradoException foane) {
 			// significa que se va a agregar uno
-			//agregarNuevaOrdenAlFinal();
+			// agregarNuevaOrdenAlFinal();
 		}
 	}
-	
+
 	/*
 	 * Método para agregar Fila a la Tabla de Ordenes de Atención.
-	 * */
+	 */
 	public void addRowLastColumn() {
-	LOG.info("Añadiendo nueva OA a la tabla...");
-			agregarNuevaOrdenAlFinal();
-			//actualizarDatosResumen();
+		LOG.info("Añadiendo nueva OA a la tabla...");
+		agregarNuevaOrdenAlFinal();
+		// actualizarDatosResumen();
 	}
 
 	public void setClient(FuseRestClient client) {
