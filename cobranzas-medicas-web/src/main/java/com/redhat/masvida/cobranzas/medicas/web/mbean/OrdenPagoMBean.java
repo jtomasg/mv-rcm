@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -41,6 +42,7 @@ public class OrdenPagoMBean extends BaseManagedBean implements Serializable {
 	private Double totalvalor;
 	private Double valorCopago;
 	private Integer totalBonificacion;
+	private boolean errorFlag;
 
 	private List<OrdenAtencionVO> ordenes;
 
@@ -79,11 +81,28 @@ public class OrdenPagoMBean extends BaseManagedBean implements Serializable {
 				.get("rowIndexId");
 		LOG.info("A Eliminar Fila: "+rowIndex+" con Valor: "+rowIndex.intValue());
 		
+		Random r = new Random();
+		int rnumber = r.nextInt(2);
+		
+		try{
+	    //Simularemos una excepción a partir de un simble DivideByZero
+		int result = 10/rnumber; 
 		//Desvinculamos la OA del RCM
 		this.ordenes.remove(rowIndex.intValue());
 		actualizarDatosResumen();
+		this.errorFlag = false;
 		if(this.ordenes.size()<=0){
 		 agregarNuevaOrdenAlFinal();
+		}
+		}
+		catch(Exception e){
+		LOG.info("Simulando excepción...");
+		/*
+		 * Fijamos desde aquí el valor de flagError para crear las condiciones
+		 * necesarias para levantar el popup de error definido en el index.
+		 * Esto, dado a que JsfUtil.addMessage no está funcionando desde acá...
+		 * */
+		this.errorFlag = true;
 		}
 	}
 
@@ -175,6 +194,14 @@ public class OrdenPagoMBean extends BaseManagedBean implements Serializable {
 
 	public void setOrdenes(List<OrdenAtencionVO> ordenes) {
 		this.ordenes = ordenes;
+	}
+
+	public boolean isErrorFlag() {
+		return errorFlag;
+	}
+
+	public void setErrorFlag(boolean errorFlag) {
+		this.errorFlag = errorFlag;
 	}
 
 }

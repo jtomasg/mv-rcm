@@ -3,16 +3,24 @@ package com.redhat.masvida.cobranzas.medicas.common.vo.business;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
+
 public class RecepcionCobranzaMedicaVO implements Serializable {
 
 	private static final long serialVersionUID = -3450306769242381268L;
 
+	@Min(value=1)
+	@Max(value=500000)
 	private Integer folio;
 	private Date fechaRecepcion;
 	private Date fechaRegistro;
 	private AgenciaVO agenciaRecepcion;
+	@Size(min=10, max=500)
 	private String observacion;
 
+	
 	public Integer getFolio() {
 		return folio;
 	}

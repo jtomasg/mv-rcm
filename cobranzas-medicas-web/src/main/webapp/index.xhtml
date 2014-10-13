@@ -30,7 +30,7 @@
 			<rich:panel header="Mantención Recepción de cobranzas médicas">
 				<h:form id="formGralId">
 					<rich:panel header="Identificación RCM" id="formRcmId">
-						<h:panelGrid columns="8">
+						<h:panelGrid columns="9">
 							<h:outputLabel value="Folio: " for="folioId" />
 							<h:inputText id="folioId" value="#{cobradorMBean.rcm.folio}"
 								required="true" label="Folio"
@@ -43,13 +43,12 @@
 									listener="#{cobradorMBean.findRcm}" execute="@this" oncomplete="if(#{cobradorMBean.found == true}){ #{rich:component('confirmacionEditarPopupId')}.show()}"
 									render="@form" />
 							</h:inputText>
-
+                            <rich:message for="folioId" />
 							<h:outputLabel value="Fecha recepción: " for="fechaRecId" />
 							<rich:calendar enableManualInput="true" id="fechaRecId"
 								label="Fecha Recepción RCM" datePattern="dd/MM/yyyy"
 								required="true" value="#{cobradorMBean.rcm.fechaRecepcion}">
 							</rich:calendar>
-
 							<h:outputLabel value="Fecha registro: " for="fechaRegId" />
 							<rich:calendar enableManualInput="true" id="fechaRegId"
 								datePattern="dd/MM/yyyy"
@@ -83,7 +82,12 @@
 						<div>
 							<h:outputLabel value="Observación: " for="obsId" />
 							<h:inputTextarea id="obsId"
-								value="#{cobradorMBean.rcm.observacion}" style="width: 90%" />
+								value="#{cobradorMBean.rcm.observacion}" style="width: 90%" >
+								<rich:validator />
+								</h:inputTextarea>
+						</div>
+						<div>
+						<rich:message for="obsId" />
 						</div>
 					</rich:panel>
 
@@ -262,7 +266,7 @@
 									<a4j:ajax event="click"
 										onbeforesubmit="event.preventDefault();"
 										listener="#{ordenPagoMBean.eliminarOA}" execute="formOrdenPagoId"
-										render="ordenesTableId cantidadOaId montoId descuentoId" />
+										render="ordenesTableId cantidadOaId montoId descuentoId" oncomplete="if(#{ordenPagoMBean.errorFlag == true}){#{rich:component(':errorEliminacionBDPopupId')}.show()}"/>
 									<f:attribute name="rowIndexId" value="#{rowKeyVar}" />
 								</h:commandLink>
 							</rich:column>
@@ -375,6 +379,21 @@
 			</rich:popupPanel>
 			
 			
+			<!-- MENSAJE ERROR ELIMINACIÓN OA -->
+			<rich:popupPanel id="errorEliminacionBDPopupId" autosized="true"
+				header="Advertencia"
+				onmaskclick="#{rich:component('errorEliminacionBDPopupId')}.hide()"
+				resizeable="false">
+
+				<rich:panel id="errorEliminacionBDId">
+					Ha habido un problema con la eliminación. Intente nuevamente...
+				</rich:panel>
+				<h:form>
+				<a4j:commandButton value="OK"
+						onclick="#{rich:component('errorEliminacionBDPopupId')}.hide();">
+					</a4j:commandButton>
+				</h:form>
+			</rich:popupPanel>
 			
 			
 			<!-- Mensajes del Sistema y Otros Popups -->
