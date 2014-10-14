@@ -1,0 +1,331 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.3.5
+-- Dumped by pg_dump version 9.3.5
+-- Started on 2014-10-13 23:37:26 CLST
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 176 (class 3079 OID 12617)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2846 (class 0 OID 0)
+-- Dependencies: 176
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 170 (class 1259 OID 249768)
+-- Name: agencia; Type: TABLE; Schema: public; Owner: masvida; Tablespace: 
+--
+
+CREATE TABLE agencia (
+    age_codigo numeric(4,0) NOT NULL,
+    age_disponible character varying(1) NOT NULL,
+    age_nombre character varying(250)
+);
+
+
+ALTER TABLE public.agencia OWNER TO masvida;
+
+--
+-- TOC entry 171 (class 1259 OID 249773)
+-- Name: cotizante; Type: TABLE; Schema: public; Owner: masvida; Tablespace: 
+--
+
+CREATE TABLE cotizante (
+    cot_rut character varying(10) NOT NULL,
+    cot_dv character varying(1),
+    cot_materno character varying(20),
+    cot_nombres character varying(50),
+    cot_paterno character varying(20)
+);
+
+
+ALTER TABLE public.cotizante OWNER TO masvida;
+
+--
+-- TOC entry 172 (class 1259 OID 249778)
+-- Name: estado_oa; Type: TABLE; Schema: public; Owner: masvida; Tablespace: 
+--
+
+CREATE TABLE estado_oa (
+    eoa_codigo numeric(2,0) NOT NULL,
+    eoa_descripcion character varying(250),
+    eoa_vigencia character varying(1) NOT NULL
+);
+
+
+ALTER TABLE public.estado_oa OWNER TO masvida;
+
+--
+-- TOC entry 173 (class 1259 OID 249783)
+-- Name: oa; Type: TABLE; Schema: public; Owner: masvida; Tablespace: 
+--
+
+CREATE TABLE oa (
+    oda_folio numeric(12,0) NOT NULL,
+    bonificacion numeric(8,0),
+    copago numeric(8,0),
+    eoa_codigo numeric(2,0),
+    oda_fechaemi date,
+    rcm_folio numeric(8,0),
+    tit_rut character varying(10),
+    valor numeric(8,0)
+);
+
+
+ALTER TABLE public.oa OWNER TO masvida;
+
+--
+-- TOC entry 174 (class 1259 OID 249788)
+-- Name: rcm; Type: TABLE; Schema: public; Owner: masvida; Tablespace: 
+--
+
+CREATE TABLE rcm (
+    rcm_folio numeric(8,0) NOT NULL,
+    age_cod_pago numeric(4,0),
+    age_cod_recep numeric(4,0),
+    rcm_cantidad_oa numeric(5,0),
+    rcm_descuento numeric(12,0),
+    rcm_fecha_pago date,
+    rcm_fecha_recepcion date,
+    rcm_fechareg character varying(10),
+    rcm_monto numeric(12,0),
+    rcm_nombrede character varying(250),
+    rcm_observ character varying(250),
+    rcm_rut_cobrador character varying(10),
+    tpd_codigo numeric(2,0)
+);
+
+
+ALTER TABLE public.rcm OWNER TO masvida;
+
+--
+-- TOC entry 175 (class 1259 OID 249796)
+-- Name: tipo_pago_doc; Type: TABLE; Schema: public; Owner: masvida; Tablespace: 
+--
+
+CREATE TABLE tipo_pago_doc (
+    tpd_codigo numeric(2,0) NOT NULL,
+    tpd_descripcion character varying(250) NOT NULL,
+    tpd_vigencia character varying(1) NOT NULL
+);
+
+
+ALTER TABLE public.tipo_pago_doc OWNER TO masvida;
+
+--
+-- TOC entry 2833 (class 0 OID 249768)
+-- Dependencies: 170
+-- Data for Name: agencia; Type: TABLE DATA; Schema: public; Owner: masvida
+--
+
+COPY agencia (age_codigo, age_disponible, age_nombre) FROM stdin;
+1	t	Concepcion
+\.
+
+
+--
+-- TOC entry 2834 (class 0 OID 249773)
+-- Dependencies: 171
+-- Data for Name: cotizante; Type: TABLE DATA; Schema: public; Owner: masvida
+--
+
+COPY cotizante (cot_rut, cot_dv, cot_materno, cot_nombres, cot_paterno) FROM stdin;
+156651370	0	Perez	Pedro Hernan	Vidal
+\.
+
+
+--
+-- TOC entry 2835 (class 0 OID 249778)
+-- Dependencies: 172
+-- Data for Name: estado_oa; Type: TABLE DATA; Schema: public; Owner: masvida
+--
+
+COPY estado_oa (eoa_codigo, eoa_descripcion, eoa_vigencia) FROM stdin;
+1	PAGADA	t
+\.
+
+
+--
+-- TOC entry 2836 (class 0 OID 249783)
+-- Dependencies: 173
+-- Data for Name: oa; Type: TABLE DATA; Schema: public; Owner: masvida
+--
+
+COPY oa (oda_folio, bonificacion, copago, eoa_codigo, oda_fechaemi, rcm_folio, tit_rut, valor) FROM stdin;
+1	100	100	1	2012-10-05	1	156651370	100
+\.
+
+
+--
+-- TOC entry 2837 (class 0 OID 249788)
+-- Dependencies: 174
+-- Data for Name: rcm; Type: TABLE DATA; Schema: public; Owner: masvida
+--
+
+COPY rcm (rcm_folio, age_cod_pago, age_cod_recep, rcm_cantidad_oa, rcm_descuento, rcm_fecha_pago, rcm_fecha_recepcion, rcm_fechareg, rcm_monto, rcm_nombrede, rcm_observ, rcm_rut_cobrador, tpd_codigo) FROM stdin;
+1	1	1	5	10	2012-10-04	2012-10-05	2012-10-05	100	12987898	Una observación	161417424	1
+\.
+
+
+--
+-- TOC entry 2838 (class 0 OID 249796)
+-- Dependencies: 175
+-- Data for Name: tipo_pago_doc; Type: TABLE DATA; Schema: public; Owner: masvida
+--
+
+COPY tipo_pago_doc (tpd_codigo, tpd_descripcion, tpd_vigencia) FROM stdin;
+1	Inmediato	t
+\.
+
+
+--
+-- TOC entry 2709 (class 2606 OID 249772)
+-- Name: agencia_pkey; Type: CONSTRAINT; Schema: public; Owner: masvida; Tablespace: 
+--
+
+ALTER TABLE ONLY agencia
+    ADD CONSTRAINT agencia_pkey PRIMARY KEY (age_codigo);
+
+
+--
+-- TOC entry 2711 (class 2606 OID 249777)
+-- Name: cotizante_pkey; Type: CONSTRAINT; Schema: public; Owner: masvida; Tablespace: 
+--
+
+ALTER TABLE ONLY cotizante
+    ADD CONSTRAINT cotizante_pkey PRIMARY KEY (cot_rut);
+
+
+--
+-- TOC entry 2713 (class 2606 OID 249782)
+-- Name: estado_oa_pkey; Type: CONSTRAINT; Schema: public; Owner: masvida; Tablespace: 
+--
+
+ALTER TABLE ONLY estado_oa
+    ADD CONSTRAINT estado_oa_pkey PRIMARY KEY (eoa_codigo);
+
+
+--
+-- TOC entry 2715 (class 2606 OID 249787)
+-- Name: oa_pkey; Type: CONSTRAINT; Schema: public; Owner: masvida; Tablespace: 
+--
+
+ALTER TABLE ONLY oa
+    ADD CONSTRAINT oa_pkey PRIMARY KEY (oda_folio);
+
+
+--
+-- TOC entry 2717 (class 2606 OID 249795)
+-- Name: rcm_pkey; Type: CONSTRAINT; Schema: public; Owner: masvida; Tablespace: 
+--
+
+ALTER TABLE ONLY rcm
+    ADD CONSTRAINT rcm_pkey PRIMARY KEY (rcm_folio);
+
+
+--
+-- TOC entry 2719 (class 2606 OID 249800)
+-- Name: tipo_pago_doc_pkey; Type: CONSTRAINT; Schema: public; Owner: masvida; Tablespace: 
+--
+
+ALTER TABLE ONLY tipo_pago_doc
+    ADD CONSTRAINT tipo_pago_doc_pkey PRIMARY KEY (tpd_codigo);
+
+
+--
+-- TOC entry 2721 (class 2606 OID 249806)
+-- Name: fk_4h5u1mo8c8s84lm3abofb1v6i; Type: FK CONSTRAINT; Schema: public; Owner: masvida
+--
+
+ALTER TABLE ONLY oa
+    ADD CONSTRAINT fk_4h5u1mo8c8s84lm3abofb1v6i FOREIGN KEY (eoa_codigo) REFERENCES estado_oa(eoa_codigo);
+
+
+--
+-- TOC entry 2722 (class 2606 OID 249811)
+-- Name: fk_duhfsgxsc1asq4lnhegwmf1lb; Type: FK CONSTRAINT; Schema: public; Owner: masvida
+--
+
+ALTER TABLE ONLY oa
+    ADD CONSTRAINT fk_duhfsgxsc1asq4lnhegwmf1lb FOREIGN KEY (rcm_folio) REFERENCES rcm(rcm_folio);
+
+
+--
+-- TOC entry 2725 (class 2606 OID 249826)
+-- Name: fk_i6kwdkmmxlky1v46i9wqmc92g; Type: FK CONSTRAINT; Schema: public; Owner: masvida
+--
+
+ALTER TABLE ONLY rcm
+    ADD CONSTRAINT fk_i6kwdkmmxlky1v46i9wqmc92g FOREIGN KEY (tpd_codigo) REFERENCES tipo_pago_doc(tpd_codigo);
+
+
+--
+-- TOC entry 2723 (class 2606 OID 249816)
+-- Name: fk_mtw6eadfvxtdoawe1muttyjkk; Type: FK CONSTRAINT; Schema: public; Owner: masvida
+--
+
+ALTER TABLE ONLY rcm
+    ADD CONSTRAINT fk_mtw6eadfvxtdoawe1muttyjkk FOREIGN KEY (age_cod_recep) REFERENCES agencia(age_codigo);
+
+
+--
+-- TOC entry 2720 (class 2606 OID 249801)
+-- Name: fk_r5ybb0r83rgkgvayixdyii9ku; Type: FK CONSTRAINT; Schema: public; Owner: masvida
+--
+
+ALTER TABLE ONLY oa
+    ADD CONSTRAINT fk_r5ybb0r83rgkgvayixdyii9ku FOREIGN KEY (tit_rut) REFERENCES cotizante(cot_rut);
+
+
+--
+-- TOC entry 2724 (class 2606 OID 249821)
+-- Name: fk_tipxnkfjbfqyprbcn1idj120r; Type: FK CONSTRAINT; Schema: public; Owner: masvida
+--
+
+ALTER TABLE ONLY rcm
+    ADD CONSTRAINT fk_tipxnkfjbfqyprbcn1idj120r FOREIGN KEY (age_cod_pago) REFERENCES agencia(age_codigo);
+
+
+--
+-- TOC entry 2845 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2014-10-13 23:37:27 CLST
+
+--
+-- PostgreSQL database dump complete
+--
+
