@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sy:switchyard xmlns:bean="urn:switchyard-component-bean:config:1.1" xmlns:resteasy="urn:switchyard-component-resteasy:config:1.1" xmlns:sca="http://docs.oasis-open.org/ns/opencsa/sca/200912" xmlns:sy="urn:switchyard-config:switchyard:1.1" name="switchyard-example" targetNamespace="urn:com.example.switchyard:switchyard-example:1.0">
+  <sca:composite name="switchyard-example" targetNamespace="urn:com.example.switchyard:switchyard-example:1.0">
+    <sca:component name="RcmBean">
+      <bean:implementation.bean class="cl.masvida.poc.rcm.RcmBean"/>
+      <sca:service name="Rcm">
+        <sca:interface.java interface="cl.masvida.poc.rcm.Rcm"/>
+      </sca:service>
+    </sca:component>
+    <sca:service name="RcmService" promote="RcmBean/Rcm">
+      <sca:interface.java interface="cl.masvida.poc.rcm.Rcm"/>
+      <resteasy:binding.rest name="rcmRest">
+        <resteasy:messageComposer class="cl.masvida.poc.rcm.CustomMessageComposer"/>
+        <resteasy:interfaces>cl.masvida.poc.rcm.RcmRestInterface</resteasy:interfaces>
+        <resteasy:contextPath>miRest</resteasy:contextPath>
+      </resteasy:binding.rest>
+    </sca:service>
+  </sca:composite>
+</sy:switchyard>
