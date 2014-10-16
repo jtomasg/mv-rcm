@@ -10,7 +10,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Inject;
 
@@ -20,16 +19,16 @@ import org.slf4j.LoggerFactory;
 
 import com.redhat.masvida.cobranzas.medicas.common.exception.AgenciaNoEncontradaException;
 import com.redhat.masvida.cobranzas.medicas.common.exception.TipoPagoNoEncontradaException;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.AgenciaVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.CobradorVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.PagoVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.RcmVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.RecepcionCobranzaMedicaVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.TipoPagoVO;
 import com.redhat.masvida.cobranzas.medicas.web.mbean.base.BaseManagedBean;
 import com.redhat.masvida.cobranzas.medicas.web.rest.client.FuseRestClient;
 import com.redhat.masvida.cobranzas.medicas.web.util.JsfUtil;
 import com.redhat.masvida.cobranzas.medicas.web.util.RichFacesUtil;
+import com.redhat.masvida.vo.AgenciaVO;
+import com.redhat.masvida.vo.CobradorVO;
+import com.redhat.masvida.vo.PagoVO;
+import com.redhat.masvida.vo.RcmVO;
+import com.redhat.masvida.vo.RecepcionCobranzaMedicaVO;
+import com.redhat.masvida.vo.TipoPagoVO;
 
 @ManagedBean
 @ViewScoped

@@ -16,18 +16,12 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.redhat.masvida.cobranzas.medicas.common.exception.AgenciaNoEncontradaException;
 import com.redhat.masvida.cobranzas.medicas.common.exception.FolioOrdeAtencionNoEncontradoException;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.AgenciaVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.CobradorVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.OrdenAtencionVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.PagoVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.PersonaVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.RecepcionCobranzaMedicaVO;
 import com.redhat.masvida.cobranzas.medicas.web.mbean.base.BaseManagedBean;
 import com.redhat.masvida.cobranzas.medicas.web.rest.client.FuseRestClient;
 import com.redhat.masvida.cobranzas.medicas.web.util.JsfUtil;
-import com.redhat.masvida.cobranzas.medicas.web.util.RichFacesUtil;
+import com.redhat.masvida.vo.OrdenAtencionVO;
+import com.redhat.masvida.vo.PersonaVO;
 
 @ManagedBean
 @ViewScoped

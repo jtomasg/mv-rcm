@@ -6,19 +6,21 @@ import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.redhat.masvida.cobranzas.medicas.common.exception.AgenciaNoEncontradaException;
 import com.redhat.masvida.cobranzas.medicas.common.exception.FolioOrdeAtencionNoEncontradoException;
 import com.redhat.masvida.cobranzas.medicas.common.exception.TipoPagoNoEncontradaException;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.AgenciaVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.OrdenAtencionVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.PagoVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.RcmVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.RecepcionCobranzaMedicaVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.TipoPagoVO;
 import com.redhat.masvida.cobranzas.medicas.web.util.RestClientCallUtil;
+import com.redhat.masvida.vo.AgenciaVO;
+import com.redhat.masvida.vo.OrdenAtencionVO;
+import com.redhat.masvida.vo.PagoVO;
+import com.redhat.masvida.vo.RcmVO;
+import com.redhat.masvida.vo.RecepcionCobranzaMedicaVO;
+import com.redhat.masvida.vo.TipoPagoVO;
+
 
 @ManagedBean
 @RequestScoped
@@ -87,10 +89,10 @@ public class FuseRestClient {
 			
 			System.out.println("JSON 1: "+json);
 			
-//			ObjectMapper mapper = new ObjectMapper();
-//			RcmVO rcmVO = mapper.readValue(json, RcmVO.class);
+			ObjectMapper mapper = new ObjectMapper();
+			RcmVO rcmVO = mapper.readValue(json, RcmVO.class);
 			
-			endpointURL = "http://localhost:8080/miRest/rcm/buscar/"+folio+"&01-01-2014&31-12-2015";
+			endpointURL = "http://localhost:8080/miRest/rcm/buscar";
 			json = restClientCallUtil.callJsonRemoteRest(endpointURL, new RcmVO());
 			
 		}catch(Exception e){
