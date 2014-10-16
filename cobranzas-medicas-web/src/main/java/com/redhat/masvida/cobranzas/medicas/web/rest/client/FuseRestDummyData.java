@@ -3,9 +3,7 @@ package com.redhat.masvida.cobranzas.medicas.web.rest.client;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Random;
 
 import javax.annotation.ManagedBean;
@@ -17,13 +15,13 @@ import org.slf4j.LoggerFactory;
 
 import com.redhat.masvida.cobranzas.medicas.common.exception.FolioOrdeAtencionNoEncontradoException;
 import com.redhat.masvida.cobranzas.medicas.common.util.RutDigitoVerificadorUtil;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.AgenciaVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.OrdenAtencionVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.PagoVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.PersonaVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.RcmVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.RecepcionCobranzaMedicaVO;
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.TipoPagoVO;
+import com.redhat.masvida.vo.AgenciaVO;
+import com.redhat.masvida.vo.OrdenAtencionVO;
+import com.redhat.masvida.vo.PagoVO;
+import com.redhat.masvida.vo.PersonaVO;
+import com.redhat.masvida.vo.RcmVO;
+import com.redhat.masvida.vo.RecepcionCobranzaMedicaVO;
+import com.redhat.masvida.vo.TipoPagoVO;
 
 @ManagedBean
 @Singleton

@@ -13,9 +13,9 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.redhat.masvida.cobranzas.medicas.common.vo.business.TipoPagoVO;
 import com.redhat.masvida.cobranzas.medicas.web.mbean.base.BaseManagedBean;
 import com.redhat.masvida.cobranzas.medicas.web.rest.client.FuseRestClient;
+import com.redhat.masvida.vo.TipoPagoVO;
 
 @ManagedBean
 @ViewScoped
