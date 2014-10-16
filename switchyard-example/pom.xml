@@ -58,10 +58,6 @@
     	<version>${switchyard.version}</version>
     </dependency>
     <dependency>
-    	<groupId>rcm-ejb</groupId>
-    	<artifactId>rcm-ejb</artifactId>
-    </dependency>
-    <dependency>
     	<groupId>com.redhat.masvida</groupId>
     	<artifactId>rcm-util</artifactId>
     	<version>0.0.1-SNAPSHOT</version>

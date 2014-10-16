@@ -8,7 +8,7 @@ import com.redhat.masvida.vo.RcmVO;
 import com.redhat.masvida.vo.RecepcionCobranzaMedicaVO;
 
 @Service(Rcm.class)
-public class RcmBean implements Rcm {
+public class RcmBeanOrg implements Rcm {
 	
 
 	@Override
@@ -20,17 +20,18 @@ public class RcmBean implements Rcm {
 		// se retorna RCM con datos Dummy. Reemplazar esta l�gica con busqueda en BD.
 		try{
 			
+			rcmVO = new RcmVO();
+			rcmVO.setRcm(new RecepcionCobranzaMedicaVO());
+			rcmVO.getRcm().setFolio(rcmIn.getRcm().getFolio());
+			rcmVO.getRcm().setFechaRecepcion(new Date());
+			rcmVO.getRcm().setFechaRegistro(new Date());
+			
 			// llamada a capa de negocio (EJB)
 			
 		}catch(Exception e){
 			e.printStackTrace();
+			
 		}
-		
-		rcmVO = new RcmVO();
-		rcmVO.setRcm(new RecepcionCobranzaMedicaVO());
-		rcmVO.getRcm().setFolio(rcmIn.getRcm().getFolio());
-		rcmVO.getRcm().setFechaRecepcion(new Date());
-		rcmVO.getRcm().setFechaRegistro(new Date());
 		
 		return rcmVO;
 	}

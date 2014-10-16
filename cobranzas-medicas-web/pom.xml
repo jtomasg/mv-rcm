@@ -156,11 +156,6 @@
 			<version>1.9</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.redhat.masvida</groupId>
-			<artifactId>rcm-util</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 
 	<profiles>
