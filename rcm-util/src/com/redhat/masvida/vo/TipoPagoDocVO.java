@@ -50,14 +50,14 @@ public class TipoPagoDocVO implements Serializable {
 
 	public RcmVO addRcm(RcmVO rcm) {
 		getRcms().add(rcm);
-		rcm.setTipoPagoDoc(this);
+		//rcm.setTipoPagoDoc(this);
 
 		return rcm;
 	}
 
 	public RcmVO removeRcm(RcmVO rcm) {
 		getRcms().remove(rcm);
-		rcm.setTipoPagoDoc(null);
+		//rcm.setTipoPagoDoc(null);
 
 		return rcm;
 	}
