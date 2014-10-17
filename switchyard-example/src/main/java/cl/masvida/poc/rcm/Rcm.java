@@ -12,6 +12,6 @@ public interface Rcm {
 	
 	TipoPagoVO[] obtenerTipoPago();
 	
-	void guardarRcm(RcmVO rcmVO)throws Exception;
+	public void guardarRcm(RcmVO rcmVO)throws Exception;
 	
 }

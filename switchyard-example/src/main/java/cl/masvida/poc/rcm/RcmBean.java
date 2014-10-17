@@ -88,17 +88,27 @@ public class RcmBean implements Rcm {
 			rcmVO.getPago().getTipoPago().setId(1);
 			rcmVO.getPago().getTipoPago().setNombre("Tipo Pago Dummy");
 
+<<<<<<< HEAD
 			System.out.println("Invocando EJB negocio...");
 			
 			// llamada a capa de negocio (EJB)
 			RCMFacade rcmFacade = (RCMFacade) lookup(
 					"rcm-ejb", RCMFacadeBean.class.getSimpleName(), 
+=======
+			// llamada a capa de negocio (EJB)
+			RCMFacade rcmFacade = (RCMFacade) lookup(
+					"rcm-ejb", 
+					RCMFacadeBean.class.getSimpleName(), 
+>>>>>>> 9d668901201518a7dd0780fd2fb90591b7be3a5d
 					RCMFacade.class.getName());
 			
 			rcmFacade.buscarRcm(new BigDecimal(rcmIn.getRcm().getFolio()));
 			
+<<<<<<< HEAD
 			System.out.println("Tx finalizada con EJB");
 			
+=======
+>>>>>>> 9d668901201518a7dd0780fd2fb90591b7be3a5d
 			System.out.println("Busqueda RCM finalizada!");
 
 		} catch (Exception e) {
@@ -179,8 +189,11 @@ public class RcmBean implements Rcm {
 			//final String viewClassName = SampleBeanRemote.class.getName();
 			
 			String strJndiLookup = "ejb:" + appName + "/" + moduleName + "/" + distinctName + "/" + beanName + "!" + interfaceName;
+<<<<<<< HEAD
 			//String strJndiLookup = "java:global/rcm-ejb/RCMFacadeBean!com.redhat.masvida.ejb.RCMFacade";
 			
+=======
+>>>>>>> 9d668901201518a7dd0780fd2fb90591b7be3a5d
 			
 			System.out.println("Looking EJB via JNDI ");
 			System.out.println(strJndiLookup);

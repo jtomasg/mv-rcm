@@ -6,8 +6,8 @@
   </link>
   <children xsi:type="pi:ContainerShape" visible="true" active="true">
     <properties key="sca-type" value="composite"/>
-    <graphicsAlgorithm xsi:type="al:Rectangle" lineWidth="1" filled="false" lineVisible="false" transparency="0.0" width="560" height="360" x="20" y="20">
-      <graphicsAlgorithmChildren xsi:type="al:RoundedRectangle" lineWidth="2" transparency="0.6" width="500" height="300" x="30" y="30" style="//@styles.0" cornerHeight="12" cornerWidth="12">
+    <graphicsAlgorithm xsi:type="al:Rectangle" lineWidth="1" filled="false" lineVisible="false" transparency="0.0" width="621" height="401" x="20" y="20">
+      <graphicsAlgorithmChildren xsi:type="al:RoundedRectangle" lineWidth="2" transparency="0.6" width="561" height="341" x="30" y="30" style="//@styles.0" cornerHeight="12" cornerWidth="12">
         <properties key="sca-type" value="composite"/>
         <graphicsAlgorithmChildren xsi:type="al:Text" foreground="//@colors.3" lineWidth="1" filled="false" transparency="0.0" width="470" height="16" x="15" y="15" font="//@fonts.1" value="switchyard-example"/>
       </graphicsAlgorithmChildren>
@@ -16,10 +16,10 @@
       <businessObjects href="../../../../../src/main/resources/META-INF/switchyard.xml#//@switchyard/@composite"/>
     </link>
     <children xsi:type="pi:ContainerShape" visible="true" active="true">
-      <graphicsAlgorithm xsi:type="al:Rectangle" lineWidth="1" filled="false" lineVisible="false" transparency="0.0" width="130" height="80" x="275" y="115">
+      <graphicsAlgorithm xsi:type="al:Rectangle" lineWidth="1" filled="false" lineVisible="false" transparency="0.0" width="130" height="80" x="325" y="155">
         <graphicsAlgorithmChildren xsi:type="al:RoundedRectangle" lineWidth="2" transparency="0.0" width="100" height="50" x="15" y="15" style="//@styles.1" cornerHeight="12" cornerWidth="12">
           <properties key="sca-type" value="component"/>
-          <graphicsAlgorithmChildren xsi:type="al:Text" foreground="//@colors.5" lineWidth="1" filled="false" transparency="0.0" width="70" height="20" x="15" y="15" font="//@fonts.1" horizontalAlignment="ALIGNMENT_CENTER" value="RcmBean"/>
+          <graphicsAlgorithmChildren xsi:type="al:Text" foreground="//@colors.5" lineWidth="1" filled="false" transparency="0.0" width="70" height="20" x="15" y="15" font="//@fonts.1" horizontalAlignment="ALIGNMENT_CENTER" value="MiRcmBean"/>
         </graphicsAlgorithmChildren>
       </graphicsAlgorithm>
       <link>
@@ -28,18 +28,18 @@
       <children xsi:type="pi:ContainerShape" visible="true" active="true">
         <graphicsAlgorithm xsi:type="al:Image" lineWidth="1" transparency="0.0" width="20" height="20" x="5" y="25" id="org.switchyard.tools.ui.editor.service.scale" stretchH="true" stretchV="true" proportional="true"/>
         <link>
-          <businessObjects href="../../../../../src/main/resources/META-INF/switchyard.xml#ComponentService:RcmBean:Rcm"/>
+          <businessObjects href="../../../../../src/main/resources/META-INF/switchyard.xml#ComponentService:MiRcmBean:MiRcm"/>
         </link>
         <anchors xsi:type="pi:FixPointAnchor" visible="true" active="true" incomingConnections="//@connections.0" useAnchorLocationAsConnectionEndpoint="true">
           <graphicsAlgorithm xsi:type="al:Rectangle" lineWidth="1" filled="false" lineVisible="false" transparency="0.0" width="10" height="20" x="-1" y="-9"/>
           <link>
-            <businessObjects href="../../../../../src/main/resources/META-INF/switchyard.xml#ComponentService:RcmBean:Rcm"/>
+            <businessObjects href="../../../../../src/main/resources/META-INF/switchyard.xml#ComponentService:MiRcmBean:MiRcm"/>
           </link>
           <location x="1" y="9"/>
         </anchors>
         <anchors xsi:type="pi:ChopboxAnchor">
           <link>
-            <businessObjects href="../../../../../src/main/resources/META-INF/switchyard.xml#ComponentService:RcmBean:Rcm"/>
+            <businessObjects href="../../../../../src/main/resources/META-INF/switchyard.xml#ComponentService:MiRcmBean:MiRcm"/>
           </link>
         </anchors>
       </children>
@@ -48,7 +48,7 @@
       <graphicsAlgorithm xsi:type="al:Rectangle" lineWidth="1" filled="false" lineVisible="false" transparency="0.0" width="100" height="50" x="10" y="80">
         <graphicsAlgorithmChildren xsi:type="al:Polygon" lineWidth="2" filled="true" transparency="0.0" width="100" height="50" style="//@styles.2">
           <properties key="sca-type" value="service"/>
-          <graphicsAlgorithmChildren xsi:type="al:Text" foreground="//@colors.7" lineWidth="1" filled="false" transparency="0.0" width="75" height="50" x="20" font="//@fonts.1" horizontalAlignment="ALIGNMENT_CENTER" value="Rcm"/>
+          <graphicsAlgorithmChildren xsi:type="al:Text" foreground="//@colors.7" lineWidth="1" filled="false" transparency="0.0" width="75" height="50" x="20" font="//@fonts.1" horizontalAlignment="ALIGNMENT_CENTER" value="MiRcm"/>
           <points before="3" after="3"/>
           <points x="75" before="3" after="3"/>
           <points x="100" y="25" before="3" after="3"/>

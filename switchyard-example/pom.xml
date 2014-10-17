@@ -57,11 +57,6 @@
     	<artifactId>switchyard-component-test-mixin-http</artifactId>
     	<version>${switchyard.version}</version>
     </dependency>
-    <dependency>
-    	<groupId>com.redhat.masvida</groupId>
-    	<artifactId>rcm-util</artifactId>
-    	<version>0.0.1-SNAPSHOT</version>
-    </dependency>
   </dependencies>
   <build>
     <plugins>
