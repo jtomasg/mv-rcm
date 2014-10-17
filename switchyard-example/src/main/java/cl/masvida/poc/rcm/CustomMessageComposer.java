@@ -66,32 +66,44 @@ public class CustomMessageComposer extends RESTEasyMessageComposer {
 	@Override
 	public RESTEasyBindingData decompose(Exchange exchange,
 			RESTEasyBindingData target) throws Exception {
-		Object content = exchange.getMessage().getContent();
-		String opName = exchange.getContract().getProviderOperation().getName();
-		if (opName.equals("getRCM") && (content == null)) {
-			exchange.getContext()
-					.setProperty(RESTEasyContextMapper.HTTP_RESPONSE_STATUS,
-							404)
-					.addLabels(new String[] { EndpointLabel.HTTP.label() });
-		}
-
-		target = super.decompose(exchange, target);
-
-		if (target.getOperationName().equals("buscarPorFolio")
-				&& (content != null) && (content instanceof RcmVO)) {
-			System.out.println("Unwraping RcmVO...");
-
-			System.out.println("Fecha: "
-					+ this.dateToString(((RcmVO) content).getRcm().getFechaRegistro()));
-
-			// Unwrap the parameters
-//			target.setParameters(new Object[] { ((RcmVO) content).getFolio()
-//					+ ":"
-//					+ this.dateToString(((RcmVO) content).getFechaRecepcion())
-//					+ ":"
-//					+ this.dateToString(((RcmVO) content).getFechaRegistro()) });
+		
+		try{
 			
-			target.setParameters(new Object[] {(RcmVO) content});
+			Object content = exchange.getMessage().getContent();
+			String opName = exchange.getContract().getProviderOperation().getName();
+			
+			if (opName.equals("getRCM") && (content == null)) {
+				exchange.getContext()
+						.setProperty(RESTEasyContextMapper.HTTP_RESPONSE_STATUS,
+								404)
+						.addLabels(new String[] { EndpointLabel.HTTP.label() });
+			}
+	
+			target = super.decompose(exchange, target);
+	
+			System.out.println("Decomposing: "+target.getOperationName()+"...");
+			
+			if (target.getOperationName().equals("buscarPorFolio")
+					&& (content != null)) {
+				System.out.println("Unwraping RcmVO...");
+	
+				System.out.println("Fecha: "
+						+ this.dateToString(((RcmVO) content).getRcm().getFechaRegistro()));
+	
+				// Unwrap the parameters
+	//			target.setParameters(new Object[] { ((RcmVO) content).getFolio()
+	//					+ ":"
+	//					+ this.dateToString(((RcmVO) content).getFechaRecepcion())
+	//					+ ":"
+	//					+ this.dateToString(((RcmVO) content).getFechaRegistro()) });
+				
+				target.setParameters(new Object[] {(RcmVO) content});
+			}
+			
+			System.out.println(target.getOperationName() + " Decomposed! ("+(content == null)+")");
+			
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 
 		return target;

@@ -10,7 +10,7 @@
     <sca:service name="Rcm" promote="RcmBean/Rcm">
       <sca:interface.java interface="cl.masvida.poc.rcm.Rcm"/>
       <resteasy:binding.rest name="rest1">
-        <resteasy:messageComposer class="cl.masvida.poc.rest.CustomMessageComposer"/>
+        <resteasy:messageComposer class="cl.masvida.poc.rcm.CustomMessageComposer"/>
         <resteasy:interfaces>cl.masvida.poc.rcm.RcmRestInterface</resteasy:interfaces>
         <resteasy:contextPath>rcmRest</resteasy:contextPath>
       </resteasy:binding.rest>
