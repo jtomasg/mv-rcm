@@ -3,12 +3,6 @@
 	<persistence-unit name="masvida-ejb-jpa">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<jta-data-source>java:jboss/datasources/MasVidaDS</jta-data-source>
-		<class>com.redhat.masvida.entities.Agencia</class>
-		<class>com.redhat.masvida.entities.Cotizante</class>
-		<class>com.redhat.masvida.entities.EstadoOa</class>
-		<class>com.redhat.masvida.entities.Oa</class>
-		<class>com.redhat.masvida.entities.Rcm</class>
-		<class>com.redhat.masvida.entities.TipoPagoDoc</class>
 		<properties>
          <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
          <property name="hibernate.show_sql" value="true" />

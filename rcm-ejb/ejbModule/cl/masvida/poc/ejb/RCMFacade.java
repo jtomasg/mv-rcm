@@ -1,4 +1,4 @@
-package com.redhat.masvida.ejb;
+package cl.masvida.poc.ejb;
 
 import java.math.BigDecimal;
 

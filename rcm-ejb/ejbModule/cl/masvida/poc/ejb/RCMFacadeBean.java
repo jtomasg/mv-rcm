@@ -1,4 +1,4 @@
-package com.redhat.masvida.ejb;
+package cl.masvida.poc.ejb;
 
 import java.math.BigDecimal;
 
@@ -6,7 +6,8 @@ import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
-import com.redhat.masvida.dao.RcmDAOLocal;
+import cl.masvida.poc.dao.RcmDAOLocal;
+
 import com.redhat.masvida.vo.RcmVO;
 
 /**

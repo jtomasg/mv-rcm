@@ -1,4 +1,4 @@
-package com.redhat.masvida.dao;
+package cl.masvida.poc.dao;
 
 import java.math.BigDecimal;
 

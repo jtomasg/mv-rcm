@@ -1,4 +1,4 @@
-package com.redhat.masvida.entities;
+package cl.masvida.poc.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
