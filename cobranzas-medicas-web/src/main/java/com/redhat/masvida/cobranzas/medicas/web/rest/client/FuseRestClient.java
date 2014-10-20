@@ -64,7 +64,7 @@ public class FuseRestClient {
 		
 		try{
 			
-			String endpointURL = "http://localhost:8080/rcmRest/rcm/agencias";
+			String endpointURL = "http://localhost:8080/rest/rcm/agencias";
 			String json = restClientCallUtil.callJsonRemoteRest(endpointURL);
 			
 			ObjectMapper mapper = new ObjectMapper();
@@ -91,7 +91,7 @@ public class FuseRestClient {
 		
 		try{
 			
-			String endpointURL = "http://localhost:8080/rcmRest/rcm/tipospago";
+			String endpointURL = "http://localhost:8080/rest/rcm/tipospago";
 			String json = restClientCallUtil.callJsonRemoteRest(endpointURL);
 			
 			ObjectMapper mapper = new ObjectMapper();
@@ -123,7 +123,7 @@ public class FuseRestClient {
 			rcmVO.setPago(pago);
 			rcmVO.setRcm(rcm);
 			
-			String endpointURL = "http://localhost:8080/rcmRest/rcm/guardar";
+			String endpointURL = "http://localhost:8080/rest/rcm/guardar";
 			restClientCallUtil.callJsonRemoteRest(endpointURL, rcmVO);
 			
 		}catch(Exception e){
@@ -136,7 +136,7 @@ public class FuseRestClient {
 		RcmVO rcmVO = null;
 		try{
 			
-			String endpointURL = "http://localhost:8080/rcmRest/rcm/buscar/"+folio+"&01-01-2014&31-12-2015";
+			String endpointURL = "http://localhost:8080/rest/rcm/buscar/"+folio;
 			String json = restClientCallUtil.callJsonRemoteRest(endpointURL);
 			
 			System.out.println("JSON 1: "+json);
@@ -144,10 +144,7 @@ public class FuseRestClient {
 			ObjectMapper mapper = new ObjectMapper();
 			rcmVO = mapper.readValue(json, RcmVO.class);
 			
-			System.out.println("Desde RcmVO[folio]: "+rcmVO.getRcm().getFolio());
-			
-			//endpointURL = "http://localhost:8080/miRest/rcm/buscar";
-			//json = restClientCallUtil.callJsonRemoteRest(endpointURL, new RcmVO());
+			LOG.debug("Desde RcmVO[folio]: "+rcmVO.getRcm().getFolio());
 			
 		}catch(Exception e){
 			LOG.info("No existe la RCM");

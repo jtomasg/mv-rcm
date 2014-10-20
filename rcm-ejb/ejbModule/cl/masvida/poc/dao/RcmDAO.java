@@ -32,29 +32,32 @@ public class RcmDAO implements RcmDAOLocal {
 	 */
 	public RcmVO buscarRcm(BigDecimal folio) {
 		
-		//Query query = em.createNamedQuery("Rcm.findByFolio");
-		//Query query2 = em.createQuery("SELECT rcm FROM Rcm rcm WHERE rcm.rcmFolio = :folio");
-		//Query query3 = em.createNativeQuery("{call ...}"); // Ejemplo llamada a SP en Oracle
-		Rcm rcmEntity = em.find(Rcm.class, folio);
-		
-//		if (lsRcms != null && lsRcms.size() == 1) {
-//			rcmEntity = lsRcms.get(0);
-//		}
+		//1. Se ejecuta la consulta contra la BD...
+			//Query query = em.createNamedQuery("Rcm.findByFolio");
+			//Query query2 = em.createQuery("SELECT rcm FROM Rcm rcm WHERE rcm.rcmFolio = :folio");
+			//Query query3 = em.createNativeQuery("{call ...}"); // Ejemplo llamada a SP en Oracle
+			Rcm rcmEntity = em.find(Rcm.class, folio);
+			
+	//		if (lsRcms != null && lsRcms.size() == 1) {
+	//			rcmEntity = lsRcms.get(0);
+	//		}
 
 		RcmVO rcmVO = null;
 		
+		// Si se encontro un registro en la BD...
 		if(rcmEntity!=null){
-			//Veamos que tiene la Entity correspondiente
-			System.out.println("--------------------------------------------------");
-			System.out.println("RCM Información");
-			System.out.println("--------------------------------------------------");
-			System.out.println("RCM Folio id:"+rcmEntity.getRcmFolio());
-			System.out.println("Fecha Recepción:"+rcmEntity.getRcmFechaRecepcion());
-			System.out.println("Agencia:"+rcmEntity.getAgencia1().getAgeNombre());
-			System.out.println("Observación:"+rcmEntity.getRcmObserv());
+			
+			//2. Informacion de a nivel de log para visualizar los datos obtenidos
+				System.out.println("--------------------------------------------------");
+				System.out.println("RCM Información");
+				System.out.println("--------------------------------------------------");
+				System.out.println("RCM Folio id:"+rcmEntity.getRcmFolio());
+				System.out.println("Fecha Recepción:"+rcmEntity.getRcmFechaRecepcion());
+				System.out.println("Agencia:"+rcmEntity.getAgencia1().getAgeNombre());
+				System.out.println("Observación:"+rcmEntity.getRcmObserv());
 		
-			//Seteamos algunos parámetros del VO
-			rcmVO = getRcmEntityToVO(rcmEntity);
+			//3. Se obtiene el VO desde el entity algunos parámetros del VO
+				rcmVO = getRcmEntityToVO(rcmEntity);
 			
 		}
 		
@@ -73,6 +76,7 @@ public class RcmDAO implements RcmDAOLocal {
 				rcmVO = new RcmVO();
 				
 				RecepcionCobranzaMedicaVO recepcion = new RecepcionCobranzaMedicaVO();
+				
 				recepcion.setFolio(rcmEntity.getRcmFolio().intValue());
 				AgenciaVO agenciaRecep = new AgenciaVO();
 				agenciaRecep.setId(rcmEntity.getAgeCodRecep().intValue());
@@ -81,6 +85,8 @@ public class RcmDAO implements RcmDAOLocal {
 				// ... seguir con los get y set
 				
 				rcmVO.setRcm(recepcion);
+				
+				
 			}
 			
 		}catch(Exception e){

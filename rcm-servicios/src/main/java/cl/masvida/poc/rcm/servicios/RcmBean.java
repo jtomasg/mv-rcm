@@ -1,4 +1,4 @@
-package cl.masvida.poc.rcm;
+package cl.masvida.poc.rcm.servicios;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -25,7 +25,6 @@ import com.redhat.masvida.vo.TipoPagoVO;
 
 @Service(Rcm.class)
 public class RcmBean implements Rcm {
-
 	private static HashMap<Integer, RcmVO> dbRcm;
 
 	@Override
@@ -192,5 +191,4 @@ public class RcmBean implements Rcm {
 		
 		return ejbReference;
 	}
-	
 }
