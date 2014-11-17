@@ -43,7 +43,7 @@ public class RcmBean implements Rcm {
 
 			// rcmVO = dbRcm.get(rcmIn.getRcm().getFolio());
 
-			rcmVO = rcmIn;
+			/*rcmVO = rcmIn;
 
 			List<OrdenAtencionVO> lsOrdenAtencion = new ArrayList<OrdenAtencionVO>();
 			for (int i = 0; i < 200; i++) {
@@ -85,17 +85,18 @@ public class RcmBean implements Rcm {
 			rcmVO.getPago().setFechaPago(new Date());
 			rcmVO.getPago().setTipoPago(new TipoPagoVO());
 			rcmVO.getPago().getTipoPago().setId(1);
-			rcmVO.getPago().getTipoPago().setNombre("Tipo Pago Dummy");
+			rcmVO.getPago().getTipoPago().setNombre("Tipo Pago Dummy");*/
 
+			
 			System.out.println("Invocando EJB negocio...");
 			
-			// llamada a capa de negocio (EJB)
+			// llamada a capa de negocio (EJB) - Búsqueda en BD
 			RCMFacade rcmFacade = (RCMFacade) lookup(
 					"rcm-ejb", 
 					RCMFacadeBean.class.getSimpleName(),
 					RCMFacade.class.getName());
 			
-			rcmFacade.buscarRcm(new BigDecimal(rcmIn.getRcm().getFolio()));
+			rcmVO = rcmFacade.buscarRcm(new BigDecimal(rcmIn.getRcm().getFolio()));
 			
 			System.out.println("Tx finalizada con EJB");
 			
@@ -115,12 +116,26 @@ public class RcmBean implements Rcm {
 
 			// Llamada a EJB de negocio
 
-			arrAgencias = new AgenciaVO[20];
-			for (int i = 0; i < 20; i++) {
+			//arrAgencias = new AgenciaVO[20];
+			/*for (int i = 0; i < 20; i++) {
 				arrAgencias[i] = new AgenciaVO();
 				arrAgencias[i].setId(i * 100);
 				arrAgencias[i].setDescripcion("Agencia " + (i * 100));
+			}*/
+			
+			RCMFacade rcmFacade = (RCMFacade) lookup(
+					"rcm-ejb", 
+					RCMFacadeBean.class.getSimpleName(),
+					RCMFacade.class.getName());
+			
+			//Obtenemos la lista y llenamos el array
+			List<AgenciaVO> agencias = rcmFacade.buscarAgencias();
+			arrAgencias= new AgenciaVO[agencias.size()];
+			
+			for(int i=0; i<arrAgencias.length;i++){
+				arrAgencias[i] = agencias.get(i);
 			}
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -137,11 +152,24 @@ public class RcmBean implements Rcm {
 
 			// Llamada a EJB de negocio
 
-			arrTipoPago = new TipoPagoVO[5];
+			/*arrTipoPago = new TipoPagoVO[5];
 			for (int i = 0; i < 5; i++) {
 				arrTipoPago[i] = new TipoPagoVO();
 				arrTipoPago[i].setId(i);
 				arrTipoPago[i].setNombre("Pago Tipo " + i);
+			}*/
+			
+			RCMFacade rcmFacade = (RCMFacade) lookup(
+					"rcm-ejb", 
+					RCMFacadeBean.class.getSimpleName(),
+					RCMFacade.class.getName());
+			
+			//Obtenemos la lista y llenamos el array
+			List<TipoPagoVO> tps = rcmFacade.buscarTipoPagos();
+			arrTipoPago= new TipoPagoVO[tps.size()];
+			
+			for(int i=0; i<arrTipoPago.length;i++){
+				arrTipoPago[i] = tps.get(i);
 			}
 
 		} catch (Exception e) {

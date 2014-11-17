@@ -141,22 +141,23 @@
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-client</artifactId>
-			<version>3.0.4.Final</version>
+			<version>3.0.5.Final</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-client</artifactId>
-			<version>1.9</version>
+			<version>1.8</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-json</artifactId>
-			<version>1.9</version>
+			<version>1.8</version>
 		</dependency>
 
 	</dependencies>
+	
 
 	<profiles>
 		<profile>

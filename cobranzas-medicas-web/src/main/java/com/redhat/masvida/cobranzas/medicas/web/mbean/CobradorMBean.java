@@ -74,7 +74,8 @@ public class CobradorMBean extends BaseManagedBean implements Serializable {
 		this.pago.setFechaPago(new Date());
 
 		// cargamos el tipo de pago por defecto del cliente
-		this.pago.setTipoPago(client.getTipoPagoDefecto());
+		//Se modifica utilizando la lista de pagos de tipoPagoMBean
+		this.pago.setTipoPago(tipoPagoMBean.getTiposPago().get(1));
 
 		// this.ordenes = new ArrayList<OrdenAtencionVO>();
 		nuevoFolio = true; // incialmente siempre es nuevo
