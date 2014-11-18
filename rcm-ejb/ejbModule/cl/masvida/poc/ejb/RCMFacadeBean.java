@@ -1,6 +1,7 @@
 package cl.masvida.poc.ejb;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Remote;
@@ -8,7 +9,9 @@ import javax.ejb.Stateless;
 
 import cl.masvida.poc.dao.RcmDAOLocal;
 
+import com.redhat.masvida.vo.AgenciaVO;
 import com.redhat.masvida.vo.RcmVO;
+import com.redhat.masvida.vo.TipoPagoVO;
 
 /**
  * Session Bean implementation class RCMFacadeBean
@@ -29,5 +32,13 @@ public class RCMFacadeBean implements RCMFacade {
     public RcmVO buscarRcm(BigDecimal i){
     	return rcmDAOLocal.buscarRcm(i);
     }
+
+	public List<AgenciaVO> buscarAgencias() {
+		return rcmDAOLocal.buscarAgencias();
+	}
+
+	public List<TipoPagoVO> buscarTipoPagos() {
+		return rcmDAOLocal.buscarTipoPagos();
+	}
 
 }
