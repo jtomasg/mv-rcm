@@ -22,6 +22,18 @@ public interface RcmRestInterface {
 			);
 	
 	@GET
+	@Path("/tipopago/{tipopago}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String buscarTipoPago(@PathParam("tipopago") Integer tipopago
+			);
+	
+	@GET
+	@Path("/agencia/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String buscarAgencia(@PathParam("id") Integer id
+			);
+	
+	@GET
 	@Path("/agencias")
 	@Produces(MediaType.APPLICATION_JSON)
 	public AgenciaVO[] obtenerAgencias();

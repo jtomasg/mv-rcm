@@ -27,14 +27,14 @@ public class CustomMessageComposer extends RESTEasyMessageComposer {
 		final Message message = super.compose(source, exchange);
 
 		RcmVO rcmVO = null;
-
 		System.out.println("========Operation Name: "
 				+ source.getOperationName());
 
 		// si es el metodo get de busqueda por folio...
-		if (source.getOperationName().equals("buscarPorFolio") ) {
+		if (source.getOperationName().equals("buscarPorFolio")) {
 
-			// se recorren e imprimen por cosola los parametros ingresados en la URL...
+			// se recorren e imprimen por cosola los parametros ingresados en la
+			// URL...
 			for (int i = 0; i < source.getParameters().length; i++) {
 				System.out.println("================== Param [" + i + "]: "
 						+ source.getParameters()[i]);
@@ -43,17 +43,40 @@ public class CustomMessageComposer extends RESTEasyMessageComposer {
 			// se envuelven los parametros en un RcmVO
 			rcmVO = new RcmVO();
 			RecepcionCobranzaMedicaVO cobranzaMedicaVO = new RecepcionCobranzaMedicaVO();
-			cobranzaMedicaVO.setFolio(Integer.parseInt((String) source.getParameters()[0]));
+			cobranzaMedicaVO.setFolio(Integer.parseInt((String) source
+					.getParameters()[0]));
 			rcmVO.setRcm(cobranzaMedicaVO);
 
 		}
-		
+
 		System.out.println((String) message.toString());
 
 		// se asocia el contenido dentro del mensaje
 		message.setContent(rcmVO);
-		
+
 		System.out.println((String) message.toString());
+
+		// Para buscar el nombre del tipo de pago....
+		if (source.getOperationName().equals("buscarTipoPago")) {
+			for (int i = 0; i < source.getParameters().length; i++) {
+				System.out.println("================== Param [" + i + "]: "
+						+ source.getParameters()[i]);
+			}
+			;
+			int id = Integer.parseInt(source.getParameters()[0].toString());
+			message.setContent(id);
+		}
+
+		// Para buscar el nombre de una Agencia....
+		if (source.getOperationName().equals("buscarAgencia")) {
+			for (int i = 0; i < source.getParameters().length; i++) {
+				System.out.println("================== Param [" + i + "]: "
+						+ source.getParameters()[i]);
+			}
+			;
+			int id = Integer.parseInt(source.getParameters()[0].toString());
+			message.setContent(id);
+		}
 
 		return message;
 	}
@@ -64,43 +87,48 @@ public class CustomMessageComposer extends RESTEasyMessageComposer {
 	@Override
 	public RESTEasyBindingData decompose(Exchange exchange,
 			RESTEasyBindingData target) throws Exception {
-		
-		try{
-			
+
+		try {
+
 			Object content = exchange.getMessage().getContent();
-			String opName = exchange.getContract().getProviderOperation().getName();
-			
+			String opName = exchange.getContract().getProviderOperation()
+					.getName();
+
 			if (opName.equals("getRCM") && (content == null)) {
 				exchange.getContext()
-						.setProperty(RESTEasyContextMapper.HTTP_RESPONSE_STATUS,
-								404)
+						.setProperty(
+								RESTEasyContextMapper.HTTP_RESPONSE_STATUS, 404)
 						.addLabels(new String[] { EndpointLabel.HTTP.label() });
 			}
-	
+
 			target = super.decompose(exchange, target);
-	
-			System.out.println("Decomposing: "+target.getOperationName()+"...");
-			
+
+			System.out.println("Decomposing: " + target.getOperationName()
+					+ "...");
+
 			if (target.getOperationName().equals("buscarPorFolio")
 					&& (content != null)) {
 				System.out.println("Unwraping RcmVO...");
-	
+
 				System.out.println("Fecha: "
-						+ this.dateToString(((RcmVO) content).getRcm().getFechaRegistro()));
-	
+						+ this.dateToString(((RcmVO) content).getRcm()
+								.getFechaRegistro()));
+
 				// Unwrap the parameters
-	//			target.setParameters(new Object[] { ((RcmVO) content).getFolio()
-	//					+ ":"
-	//					+ this.dateToString(((RcmVO) content).getFechaRecepcion())
-	//					+ ":"
-	//					+ this.dateToString(((RcmVO) content).getFechaRegistro()) });
-				
-				target.setParameters(new Object[] {(RcmVO) content});
+				// target.setParameters(new Object[] { ((RcmVO)
+				// content).getFolio()
+				// + ":"
+				// + this.dateToString(((RcmVO) content).getFechaRecepcion())
+				// + ":"
+				// + this.dateToString(((RcmVO) content).getFechaRegistro()) });
+
+				target.setParameters(new Object[] { (RcmVO) content });
 			}
-			
-			System.out.println(target.getOperationName() + " Decomposed! ("+(content == null)+")");
-			
-		}catch(Exception e){
+
+			System.out.println(target.getOperationName() + " Decomposed! ("
+					+ (content == null) + ")");
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 

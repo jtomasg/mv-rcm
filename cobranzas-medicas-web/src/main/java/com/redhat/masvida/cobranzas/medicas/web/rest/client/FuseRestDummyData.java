@@ -36,23 +36,15 @@ class FuseRestDummyData {
 	@PostConstruct
 	public void init() {
 		LOG.info("Inicio creacion db dummy");
-		buildAgencias();
+		//buildAgencias();
 		buildPersonas();
-		buildTipoPago();
+		//buildTipoPago();
 		buildRcm();
 		LOG.info("Fin creacion db dummy");
 	}
 
 	private void buildRcm() {
 		this.dbRcm = new HashMap<Integer, RcmVO>();
-	}
-
-	private void buildTipoPago() {
-		this.dbTipoPagos = new HashMap<Integer, TipoPagoVO>();
-		dbTipoPagos.put(1, new TipoPagoVO(1, "INMEDIATO"));
-		dbTipoPagos.put(2, new TipoPagoVO(2, "DIFERIDO POR AGENCIA"));
-		dbTipoPagos.put(3, new TipoPagoVO(3, "DIFERIDO POR DEPOSITO"));
-		dbTipoPagos.put(4, new TipoPagoVO(4, "DIFERIDO POR CORREO"));
 	}
 
 	public String getNombreAgencia(Integer id) {
@@ -70,17 +62,6 @@ class FuseRestDummyData {
 					.getRut().intValue() + "");
 			p.setDv(dv <= 9 ? dv.toString().charAt(0) : dv <= 10 ? 'K' : '0');
 			this.dbPersonas.put(p.getRut(), p);
-		}
-
-	}
-
-	private void buildAgencias() {
-		this.dbAgencias = new HashMap<Integer, AgenciaVO>();
-		for (int i = 1; i < 15; i++) {
-			AgenciaVO a = new AgenciaVO();
-			a.setId(i * 100);
-			a.setDescripcion("Agencia de prueba {" + a.getId() + "}");
-			this.dbAgencias.put(a.getId(), a);
 		}
 
 	}

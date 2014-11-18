@@ -1,5 +1,6 @@
 package cl.masvida.poc.dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,7 +15,10 @@ import org.hibernate.Transaction;
 import org.hibernate.jdbc.Work;
 
 import cl.masvida.poc.entities.Agencia;
+import cl.masvida.poc.entities.TipoPagoDoc;
+
 import com.redhat.masvida.vo.AgenciaVO;
+import com.redhat.masvida.vo.TipoPagoVO;
 
 @Stateless
 public class AgenciaDAO implements AgenciaDAOLocal {
@@ -83,6 +87,58 @@ public class AgenciaDAO implements AgenciaDAOLocal {
 		}
 
 		return agencias;
+	}
+
+	
+	public String buscarAgencia(BigDecimal i) {
+		AgenciaVO ageVO = null;
+		// Obtenemos la sesión desde el EM.
+				Session session = (Session) em.getDelegate();
+
+				/*
+				 * Se especifica el nivel de isolation de esta forma, ya que
+				 * session.connection, está deprecado en Hibernate 4+. Hay otras formas
+				 * de obtener la conexión y hacer el set del nivel de isolation
+				 * http://stackoverflow
+				 * .com/questions/3526556/session-connection-deprecated-on-hibernate
+				 */
+				session.doWork(new Work() {
+
+					@Override
+					public void execute(Connection connection) throws SQLException {
+						connection
+								.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+					}
+
+				});
+				// Comienza la Transacción
+				Transaction tx = null;
+				try {
+					tx = session.beginTransaction();
+					System.out.println("Buscando Agencia por Código....");
+					// Cambiando tipo de la Query.
+					org.hibernate.Query query = session
+							.createQuery("FROM Agencia WHERE ageCodigo=:agecodigo");
+					query.setParameter("agecodigo", i);
+					@SuppressWarnings("unchecked")
+					List<Agencia> list = query.list();
+					tx.commit();
+                    
+					// Si se encontro un registro en la BD...
+					if (list.size() > 0){
+						ageVO = new AgenciaVO();
+						ageVO.setId(list.get(0).getAgeCodigo().intValue());
+						ageVO.setDescripcion(list.get(0).getAgeNombre());
+					}
+
+				} catch (Exception e) {
+					if (tx != null)
+						tx.rollback();
+					e.printStackTrace();
+				} finally {
+					session.close();
+				}
+		return ageVO.getDescripcion();
 	}
 
 }

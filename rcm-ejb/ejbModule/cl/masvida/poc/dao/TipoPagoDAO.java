@@ -1,5 +1,6 @@
 package cl.masvida.poc.dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import org.hibernate.Transaction;
 import org.hibernate.jdbc.Work;
 
 import cl.masvida.poc.entities.TipoPagoDoc;
+
 import com.redhat.masvida.vo.TipoPagoVO;
 
 @Stateless
@@ -83,6 +85,58 @@ public class TipoPagoDAO implements TipoPagoDAOLocal {
 			session.close();
 		}
 		return tipopagos;
+	}
+
+
+	public String buscarTipoPago(BigDecimal i) {
+		TipoPagoVO tpVO = null;
+		// Obtenemos la sesión desde el EM.
+				Session session = (Session) em.getDelegate();
+
+				/*
+				 * Se especifica el nivel de isolation de esta forma, ya que
+				 * session.connection, está deprecado en Hibernate 4+. Hay otras formas
+				 * de obtener la conexión y hacer el set del nivel de isolation
+				 * http://stackoverflow
+				 * .com/questions/3526556/session-connection-deprecated-on-hibernate
+				 */
+				session.doWork(new Work() {
+
+					@Override
+					public void execute(Connection connection) throws SQLException {
+						connection
+								.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+					}
+
+				});
+				// Comienza la Transacción
+				Transaction tx = null;
+				try {
+					tx = session.beginTransaction();
+					System.out.println("Buscando TipoPago por Código....");
+					// Cambiando tipo de la Query.
+					org.hibernate.Query query = session
+							.createQuery("FROM TipoPagoDoc WHERE tpdCodigo=:tpdcodigo");
+					query.setParameter("tpdcodigo", i);
+					@SuppressWarnings("unchecked")
+					List<TipoPagoDoc> list = query.list();
+					tx.commit();
+                    
+					// Si se encontro un registro en la BD...
+					if (list.size() > 0){
+						tpVO = new TipoPagoVO();
+						tpVO.setId(list.get(0).getTpdCodigo().intValue());
+						tpVO.setNombre(list.get(0).getTpdDescripcion());
+					}
+
+				} catch (Exception e) {
+					if (tx != null)
+						tx.rollback();
+					e.printStackTrace();
+				} finally {
+					session.close();
+				}
+		return tpVO.getNombre();
 	}
 
 }

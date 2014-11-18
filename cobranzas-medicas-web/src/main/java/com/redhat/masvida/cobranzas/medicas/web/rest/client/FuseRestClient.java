@@ -37,15 +37,19 @@ public class FuseRestClient {
 
 	public String getNombreAgencia(Integer id)
 			throws AgenciaNoEncontradaException {
+		String nombre = null;
 		try {
 			LOG.debug("Consultando a los metodos REST por la id={} de Agencia",
 					id);
-			return db.getNombreAgencia(id);
-		} catch (NullPointerException e) { // TODO: definir errores de negocio
+			String endpointURL = "http://localhost:8080/rest/rcm/agencia/"+id;
+			String json = restClientCallUtil.callJsonRemoteRest(endpointURL);
+			System.out.println("JSON 1: "+json);
+			nombre = json;
+		} catch (Exception e) { // TODO: definir errores de negocio
 			LOG.debug("Ocurrio un error al buscar una agencia con la ID {}", id);
 			throw new AgenciaNoEncontradaException();
 		}
-
+        return nombre;
 	}
 
 	public String getNombreRutCobrador(String rut) {
@@ -159,13 +163,22 @@ public class FuseRestClient {
 		db.deleteRcm(rcm);
 	}
 
-	public String getNombreTipoPago(Integer id)
-			throws TipoPagoNoEncontradaException {
-		try {
-			return db.getNombreTipoPago(id);
-		} catch (NullPointerException e) { // TODO: definir errores de negocio
-			throw new TipoPagoNoEncontradaException();
-		}
-
+	public String getNombreTipoPago(Integer id) throws TipoPagoNoEncontradaException{
+	String nombre = null;
+	try{
+		
+		String endpointURL = "http://localhost:8080/rest/rcm/tipopago/"+id;
+		String json = restClientCallUtil.callJsonRemoteRest(endpointURL);
+		
+		System.out.println("JSON 1: "+json);
+		nombre = json;
+		
+	}catch(Exception e){
+		LOG.info("No existe un tipo de pago con la ID especificada.");
+		throw new TipoPagoNoEncontradaException();
 	}
+	return nombre;
+	}
+	
+	
 }

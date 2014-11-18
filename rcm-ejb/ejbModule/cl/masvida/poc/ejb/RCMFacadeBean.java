@@ -49,4 +49,13 @@ public class RCMFacadeBean implements RCMFacade {
 		return tipoPagoDAOLocal.buscarTipoPagos();
 	}
 
+	public String buscarTipoPago(BigDecimal i) {
+		return tipoPagoDAOLocal.buscarTipoPago(i);
+	}
+
+
+	public String buscarAgencia(BigDecimal i) {
+		return agenciaDAOLocal.buscarAgencia(i);
+	}
+
 }

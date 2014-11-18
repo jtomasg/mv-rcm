@@ -11,6 +11,10 @@ public interface Rcm {
 	AgenciaVO[] obtenerAgencias();
 
 	TipoPagoVO[] obtenerTipoPago();
+	
+    String buscarTipoPago(Integer tipopago);
+
+    String buscarAgencia(Integer id);
 
 	public void guardarRcm(RcmVO rcmVO) throws Exception;
 }
