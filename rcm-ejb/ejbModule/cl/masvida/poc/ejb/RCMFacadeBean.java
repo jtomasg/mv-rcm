@@ -8,6 +8,8 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import cl.masvida.poc.dao.RcmDAOLocal;
+import cl.masvida.poc.dao.AgenciaDAOLocal;
+import cl.masvida.poc.dao.TipoPagoDAOLocal;
 
 import com.redhat.masvida.vo.AgenciaVO;
 import com.redhat.masvida.vo.RcmVO;
@@ -22,6 +24,12 @@ public class RCMFacadeBean implements RCMFacade {
 	@EJB
 	RcmDAOLocal rcmDAOLocal;
 	
+	@EJB
+	AgenciaDAOLocal agenciaDAOLocal;
+	
+	@EJB
+	TipoPagoDAOLocal tipoPagoDAOLocal;
+	
     /**
      * Default constructor. 
      */
@@ -34,11 +42,11 @@ public class RCMFacadeBean implements RCMFacade {
     }
 
 	public List<AgenciaVO> buscarAgencias() {
-		return rcmDAOLocal.buscarAgencias();
+		return agenciaDAOLocal.buscarAgencias();
 	}
 
 	public List<TipoPagoVO> buscarTipoPagos() {
-		return rcmDAOLocal.buscarTipoPagos();
+		return tipoPagoDAOLocal.buscarTipoPagos();
 	}
 
 }

@@ -1,6 +1,8 @@
 package cl.masvida.poc.dao;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,11 +10,12 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
-import cl.masvida.poc.entities.Agencia;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.jdbc.Work;
+
 import cl.masvida.poc.entities.Rcm;
-import cl.masvida.poc.entities.TipoPagoDoc;
 
 import com.redhat.masvida.vo.AgenciaVO;
 import com.redhat.masvida.vo.CobradorVO;
@@ -47,36 +50,54 @@ public class RcmDAO implements RcmDAOLocal {
 		// em.createQuery("SELECT rcm FROM Rcm rcm WHERE rcm.rcmFolio = :folio");
 		// Query query3 = em.createNativeQuery("{call ...}"); // Ejemplo llamada
 		// a SP en Oracle
-		Rcm rcmEntity = em.find(Rcm.class, folio);
-
 		// if (lsRcms != null && lsRcms.size() == 1) {
 		// rcmEntity = lsRcms.get(0);
 		// }
-
 		RcmVO rcmVO = null;
+		// Obtenemos la sesión desde el EM.
+				Session session = (Session) em.getDelegate();
 
-		// Si se encontro un registro en la BD...
-		if (rcmEntity != null) {
+				/*
+				 * Se especifica el nivel de isolation de esta forma, ya que
+				 * session.connection, está deprecado en Hibernate 4+. Hay otras formas
+				 * de obtener la conexión y hacer el set del nivel de isolation
+				 * http://stackoverflow
+				 * .com/questions/3526556/session-connection-deprecated-on-hibernate
+				 */
+				session.doWork(new Work() {
 
-			// 2. Informacion de a nivel de log para visualizar los datos
-			// obtenidos
-			System.out
-					.println("--------------------------------------------------");
-			System.out.println("RCM Información");
-			System.out
-					.println("--------------------------------------------------");
-			System.out.println("RCM Folio id:" + rcmEntity.getRcmFolio());
-			System.out.println("Fecha Recepción:"
-					+ rcmEntity.getRcmFechaRecepcion());
-			System.out.println("Agencia:"
-					+ rcmEntity.getAgencia1().getAgeNombre());
-			System.out.println("Observación:" + rcmEntity.getRcmObserv());
+					@Override
+					public void execute(Connection connection) throws SQLException {
+						connection
+								.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+					}
 
-			// 3. Se obtiene el VO desde el entity algunos parámetros del VO
-			rcmVO = getRcmEntityToVO(rcmEntity);
+				});
+				// Comienza la Transacción
+				Transaction tx = null;
+				try {
+					tx = session.beginTransaction();
+					System.out.println("Buscando RCM por Folio....");
+					// Cambiando tipo de la Query.
+					org.hibernate.Query query = session
+							.createQuery("FROM Rcm WHERE rcmFolio=:folio");
+					query.setParameter("folio", folio);
+					@SuppressWarnings("unchecked")
+					List<Rcm> list = query.list();
+					tx.commit();
+                    
+					// Si se encontro un registro en la BD...
+					if (list.size() > 0){
+						rcmVO = getRcmEntityToVO(list.get(0));
+					}
 
-		}
-
+				} catch (Exception e) {
+					if (tx != null)
+						tx.rollback();
+					e.printStackTrace();
+				} finally {
+					session.close();
+				}
 		return rcmVO;
 
 	}
@@ -197,50 +218,6 @@ public class RcmDAO implements RcmDAOLocal {
 		}
 
 		return rcmVO;
-	}
-
-	public List<AgenciaVO> buscarAgencias() {
-		// Creamos nuestra lista vacía
-		List<AgenciaVO> agencias = new ArrayList<AgenciaVO>();
-
-		// Obtendremos la lista de Entidades inicialmente para Transformarlas en
-		// VO
-		Query query = em.createNamedQuery("Agencia.findAll");
-		@SuppressWarnings("unchecked")
-		List<Agencia> ags = query.getResultList();
-		System.out.println("El tamaño de la lista es:" + ags.size());
-
-		// Volcamos cada entidad en la lista de VO
-		for (int i = 0; i < ags.size() && ags != null; i++) {
-			AgenciaVO vo = new AgenciaVO();
-			vo.setId(ags.get(i).getAgeCodigo().intValue());
-			vo.setDescripcion(ags.get(i).getAgeNombre());
-			agencias.add(vo);
-		}
-
-		return agencias;
-	}
-
-	
-	public List<TipoPagoVO> buscarTipoPagos() {
-		// Creamos nuestra lista vacía
-		List<TipoPagoVO> tipopagos = new ArrayList<TipoPagoVO>();
-		// Obtendremos la lista de Entidades inicialmente para Transformarlas en
-				// VO
-				Query query = em.createNamedQuery("TipoPagoDoc.findAll");
-				@SuppressWarnings("unchecked")
-				List<TipoPagoDoc> tps = query.getResultList();
-				System.out.println("El tamaño de la lista es:" + tps.size());
-
-				// Volcamos cada entidad en la lista de VO
-				for (int i = 0; i < tps.size() && tps != null; i++) {
-					TipoPagoVO tp = new TipoPagoVO();
-					tp.setId(tps.get(i).getTpdCodigo().intValue());
-					tp.setNombre(tps.get(i).getTpdDescripcion());
-					tipopagos.add(tp);
-				}
-
-		return tipopagos;
 	}
 
 }
