@@ -243,15 +243,15 @@
 								<f:facet name="header">
 									<h:outputText value="Rut Titular" />
 								</f:facet>
-								<h:inputText readonly="#{loginMBean.userHO}" value="#{orden.titular.rut}"  styleClass="rutFormatClass"/>
+								<h:inputText readonly="#{loginMBean.userHO}" value="#{orden.titular.rut}"  maxlength="0"/>
 							</rich:column>
 							<rich:column width="150px">
 								<f:facet name="header">
 									<h:outputText value="Nombre Titular" />
 								</f:facet>
-								<h:inputText readonly="#{loginMBean.userHO}" value="#{orden.titular.nombre}">
+								<h:inputText readonly="#{loginMBean.userHO}" value="#{orden.titular.nombre}" maxlength="0">
 								<a4j:ajax event="keypress"
-								        onbeforesubmit="event.preventDefault(); if (event.keyCode != 9) { return false;}"
+								        onbeforesubmit="if (event.keyCode != 9) { return false;}"
 										listener="#{ordenPagoMBean.addRowLastColumn}" execute="formOrdenPagoId"
 										render="ordenesTableId cantidadOaId montoId descuentoId" oncomplete="setFocus(#{rowKeyVar});"/>
 									<a4j:ajax event="change"
@@ -340,7 +340,7 @@
 				</rich:panel>
 				<h:form>
 					<a4j:commandButton value="Sí" onclick="getId();" actionListener="#{cobradorMBean.resolveRcm()}" immediate="true"
-									 render=":formGralId" oncomplete="#{rich:component('confirmacionEditarPopupId')}.hide();">
+									 render=":formGralId:folioId :formGralId:ordenesTableId :formGralId:formPagoId :formGralId:cantidadOaId :formGralId:montoId :formGralId:descuentoId" oncomplete="#{rich:component('confirmacionEditarPopupId')}.hide();">
 					<a4j:jsFunction name="idEdicion">
 					<a4j:param name="rcm_id" assignTo="#{cobradorMBean.rcm.folio}"></a4j:param>
 					</a4j:jsFunction>

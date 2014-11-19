@@ -146,7 +146,7 @@ public class FuseRestClient {
 
 		} catch (Exception e) {
 			LOG.info("No existe la OA");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 
 		return oaVO;

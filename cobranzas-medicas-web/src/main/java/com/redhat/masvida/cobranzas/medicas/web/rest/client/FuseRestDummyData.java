@@ -37,9 +37,9 @@ class FuseRestDummyData {
 	public void init() {
 		LOG.info("Inicio creacion db dummy");
 		//buildAgencias();
-		buildPersonas();
+		//buildPersonas();
 		//buildTipoPago();
-		buildRcm();
+		//buildRcm();
 		LOG.info("Fin creacion db dummy");
 	}
 
