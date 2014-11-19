@@ -126,7 +126,11 @@ public class OrdenPagoMBean extends BaseManagedBean implements Serializable {
 			// consultamos a los servicios
 			OrdenAtencionVO found = client.loadOrdenAtencion(ordenVo
 					.getFolioOA());
+			
+			//Intentar añadir SOLO SI LA OA != null, sino, mostrará comportamiento extraño en la datatable.
+			if(found!=null){
 			this.ordenes.set(rowIndex, found);
+			}
 
 			JsfUtil.addMessage(event.getComponent().getClientId(),
 					"se ha cargado un folio OA");

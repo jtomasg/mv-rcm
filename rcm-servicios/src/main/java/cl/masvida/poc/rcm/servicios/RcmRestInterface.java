@@ -9,6 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.redhat.masvida.vo.AgenciaVO;
+import com.redhat.masvida.vo.OaVO;
 import com.redhat.masvida.vo.RcmVO;
 import com.redhat.masvida.vo.TipoPagoVO;
 
@@ -19,6 +20,12 @@ public interface RcmRestInterface {
 	@Path("/buscar/{folio}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public RcmVO buscarPorFolio(@PathParam("folio") String folio
+			);
+	
+	@GET
+	@Path("/oa/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public OaVO buscarOaPorFolio(@PathParam("id") Integer id
 			);
 	
 	@GET

@@ -77,6 +77,17 @@ public class CustomMessageComposer extends RESTEasyMessageComposer {
 			int id = Integer.parseInt(source.getParameters()[0].toString());
 			message.setContent(id);
 		}
+		
+		// Para buscar una Orden de Atención por ID....
+				if (source.getOperationName().equals("buscarOaPorFolio")) {
+					for (int i = 0; i < source.getParameters().length; i++) {
+						System.out.println("================== Param [" + i + "]: "
+								+ source.getParameters()[i]);
+					}
+					;
+					int id = Integer.parseInt(source.getParameters()[0].toString());
+					message.setContent(id);
+				}
 
 		return message;
 	}

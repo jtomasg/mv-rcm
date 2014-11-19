@@ -17,6 +17,7 @@ import cl.masvida.poc.ejb.RCMFacadeBean;
 
 import com.redhat.masvida.vo.AgenciaVO;
 import com.redhat.masvida.vo.CobradorVO;
+import com.redhat.masvida.vo.OaVO;
 import com.redhat.masvida.vo.OrdenAtencionVO;
 import com.redhat.masvida.vo.PagoVO;
 import com.redhat.masvida.vo.PersonaVO;
@@ -244,5 +245,29 @@ public class RcmBean implements Rcm {
 		System.out.println("Tx finalizada con EJB");
 
 		return ageVO;
+	}
+
+	@Override
+	public OaVO buscarOaPorFolio(Integer id) {
+		OaVO oaVO = null;
+		try {
+
+			System.out.println("Invocando EJB negocio...");
+
+			// llamada a capa de negocio (EJB) - Búsqueda en BD
+			RCMFacade rcmFacade = (RCMFacade) lookup("rcm-ejb",
+					RCMFacadeBean.class.getSimpleName(),
+					RCMFacade.class.getName());
+
+			oaVO = rcmFacade.buscarOa(new BigDecimal(id));
+
+			System.out.println("Tx finalizada con EJB");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return oaVO;
+		
 	}
 }
