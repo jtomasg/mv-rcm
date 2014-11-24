@@ -1,6 +1,7 @@
 package cl.masvida.poc.rcm.servicios;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -38,6 +39,12 @@ public interface RcmRestInterface {
 	@Path("/agencia/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String buscarAgencia(@PathParam("id") Integer id
+			);
+	
+	@GET
+	@Path("/eliminar/{folio}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void eliminarPorFolio(@PathParam("folio") String folio
 			);
 	
 	@GET

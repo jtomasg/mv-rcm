@@ -197,7 +197,17 @@ public class FuseRestClient {
 
 	public void deleteRcm(RecepcionCobranzaMedicaVO rcm, PagoVO pago,
 			List<OrdenAtencionVO> ordenes) {
-		db.deleteRcm(rcm);
+			String endpointURL = "http://localhost:8080/rest/rcm/eliminar/"
+					+ rcm.getFolio();
+			try {
+				String json = restClientCallUtil.callJsonRemoteRest(endpointURL);
+				//System.out.println("JSON 1: " + json);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			}
+
+	
 	}
 
 	public String getNombreTipoPago(Integer id)

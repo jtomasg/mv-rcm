@@ -135,6 +135,7 @@ public class CobradorMBean extends BaseManagedBean implements Serializable {
 		try {
 			System.out.println("Eliminando el RCM con ID: "+this.rcm.getFolio());
 			client.deleteRcm(this.rcm, pago, ordenPagoMBean.getOrdenes());
+			this.found = false;
 			prepareNuevo();
 			
 		} catch (Exception ex) {

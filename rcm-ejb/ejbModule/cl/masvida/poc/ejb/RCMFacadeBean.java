@@ -68,4 +68,15 @@ public class RCMFacadeBean implements RCMFacade {
 		return oaDAOLocal.buscarOa(i);
 	}
 
+	@Override
+	public void guardarRcm(RcmVO rcmVO) {
+		rcmDAOLocal.guardarRcm(rcmVO);
+		
+	}
+
+	@Override
+	public void eliminarRcm(BigDecimal i) {
+		rcmDAOLocal.eliminarRcm(i);
+	}
+
 }

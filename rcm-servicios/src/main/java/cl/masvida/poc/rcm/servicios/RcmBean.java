@@ -26,7 +26,7 @@ import com.redhat.masvida.vo.TipoPagoVO;
 
 @Service(Rcm.class)
 public class RcmBean implements Rcm {
-	private static HashMap<Integer, RcmVO> dbRcm;
+	//private static HashMap<Integer, RcmVO> dbRcm;
 
 	@Override
 	public RcmVO buscarPorFolio(RcmVO rcmIn) {
@@ -168,12 +168,10 @@ public class RcmBean implements Rcm {
 
 	@Override
 	public void guardarRcm(RcmVO rcmVO) throws Exception {
-
-		if (dbRcm == null)
-			dbRcm = new HashMap<Integer, RcmVO>();
-
-		dbRcm.put(rcmVO.getRcm().getFolio(), rcmVO);
-
+		RCMFacade rcmFacade = (RCMFacade) lookup("rcm-ejb",
+				RCMFacadeBean.class.getSimpleName(),
+				RCMFacade.class.getName());
+		rcmFacade.guardarRcm(rcmVO);
 	}
 
 	private Object lookup(String moduleName, String beanName,
@@ -269,5 +267,19 @@ public class RcmBean implements Rcm {
 
 		return oaVO;
 		
+	}
+
+	@Override
+	public void eliminarPorFolio(Integer folio) {
+		System.out.println("Invocando EJB negocio...");
+
+		// llamada a capa de negocio (EJB) - Búsqueda en BD
+		RCMFacade rcmFacade = (RCMFacade) lookup("rcm-ejb",
+	    RCMFacadeBean.class.getSimpleName(), RCMFacade.class.getName());
+
+		rcmFacade.eliminarRcm(new BigDecimal(folio));
+
+		System.out.println("Tx finalizada con EJB");
+
 	}
 }

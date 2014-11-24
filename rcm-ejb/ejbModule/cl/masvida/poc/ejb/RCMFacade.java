@@ -14,9 +14,11 @@ import com.redhat.masvida.vo.TipoPagoVO;
 public interface RCMFacade {
 
 	public RcmVO buscarRcm(BigDecimal i);
+	public void eliminarRcm(BigDecimal i);
 	public String buscarAgencia(BigDecimal i);
 	public List<AgenciaVO> buscarAgencias();
 	public List<TipoPagoVO> buscarTipoPagos();
 	public String buscarTipoPago(BigDecimal i);
 	public OaVO buscarOa(BigDecimal i);
+	public void guardarRcm(RcmVO rcmVO);
 }

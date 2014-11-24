@@ -10,11 +10,15 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.jdbc.Work;
 
+import cl.masvida.poc.entities.Agencia;
+import cl.masvida.poc.entities.EstadoOa;
+import cl.masvida.poc.entities.Oa;
 import cl.masvida.poc.entities.Rcm;
 
 import com.redhat.masvida.vo.AgenciaVO;
@@ -55,49 +59,49 @@ public class RcmDAO implements RcmDAOLocal {
 		// }
 		RcmVO rcmVO = null;
 		// Obtenemos la sesión desde el EM.
-				Session session = (Session) em.getDelegate();
+		Session session = (Session) em.getDelegate();
 
-				/*
-				 * Se especifica el nivel de isolation de esta forma, ya que
-				 * session.connection, está deprecado en Hibernate 4+. Hay otras formas
-				 * de obtener la conexión y hacer el set del nivel de isolation
-				 * http://stackoverflow
-				 * .com/questions/3526556/session-connection-deprecated-on-hibernate
-				 */
-				session.doWork(new Work() {
+		/*
+		 * Se especifica el nivel de isolation de esta forma, ya que
+		 * session.connection, está deprecado en Hibernate 4+. Hay otras formas
+		 * de obtener la conexión y hacer el set del nivel de isolation
+		 * http://stackoverflow
+		 * .com/questions/3526556/session-connection-deprecated-on-hibernate
+		 */
+		session.doWork(new Work() {
 
-					@Override
-					public void execute(Connection connection) throws SQLException {
-						connection
-								.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
-					}
+			@Override
+			public void execute(Connection connection) throws SQLException {
+				connection
+						.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+			}
 
-				});
-				// Comienza la Transacción
-				Transaction tx = null;
-				try {
-					tx = session.beginTransaction();
-					System.out.println("Buscando RCM por Folio....");
-					// Cambiando tipo de la Query.
-					org.hibernate.Query query = session
-							.createQuery("FROM Rcm WHERE rcmFolio=:folio");
-					query.setParameter("folio", folio);
-					@SuppressWarnings("unchecked")
-					List<Rcm> list = query.list();
-					tx.commit();
-                    
-					// Si se encontro un registro en la BD...
-					if (list.size() > 0){
-						rcmVO = getRcmEntityToVO(list.get(0));
-					}
+		});
+		// Comienza la Transacción
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			System.out.println("Buscando RCM por Folio....");
+			// Cambiando tipo de la Query.
+			org.hibernate.Query query = session
+					.createQuery("FROM Rcm WHERE rcmFolio=:folio");
+			query.setParameter("folio", folio);
+			@SuppressWarnings("unchecked")
+			List<Rcm> list = query.list();
+			tx.commit();
 
-				} catch (Exception e) {
-					if (tx != null)
-						tx.rollback();
-					e.printStackTrace();
-				} finally {
-					session.close();
-				}
+			// Si se encontro un registro en la BD...
+			if (list.size() > 0) {
+				rcmVO = getRcmEntityToVO(list.get(0));
+			}
+
+		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return rcmVO;
 
 	}
@@ -218,6 +222,96 @@ public class RcmDAO implements RcmDAOLocal {
 		}
 
 		return rcmVO;
+	}
+
+	@Override
+	public void guardarRcm(RcmVO rcmVO) {
+		System.out.println("Iniciando Método de Guardado de RCM");
+		System.out.println("------------------------------------");
+		Rcm rcm = getRcmVOToEntity(rcmVO);
+		em.persist(rcm);
+
+	}
+
+	private Rcm getRcmVOToEntity(RcmVO rcmVO) {
+		Rcm rcm = null;
+
+		try {
+			if (rcmVO != null) {
+				rcm = new Rcm();
+
+				rcm.setRcmFolio(new BigDecimal(rcmVO.getRcm().getFolio()));
+				rcm.setAgeCodPago(new BigDecimal(rcmVO.getPago()
+						.getAgenciaPago().getId()));
+				rcm.setAgeCodRecep(new BigDecimal(rcmVO.getRcm()
+						.getAgenciaRecepcion().getId()));
+				rcm.setRcmCantidadOa(new BigDecimal(rcmVO.getOrdenes().size()));
+
+				Double descuento = 0d;
+				Double valor = 0d;
+
+				// Seteo del Descuento y Valor
+				for (int i = 0; i < rcmVO.getOrdenes().size(); i++) {
+					descuento += rcmVO.getOrdenes().get(i).getBonificacion();
+					valor += rcmVO.getOrdenes().get(i).getValor();
+				}
+
+				rcm.setRcmDescuento(new BigDecimal(descuento));
+				rcm.setRcmMonto(new BigDecimal(valor));
+				rcm.setRcmFechaPago(rcmVO.getPago().getFechaPago());
+				rcm.setRcmFechaRecepcion(rcmVO.getRcm().getFechaRecepcion());
+				rcm.setRcmFecreg("" + rcmVO.getRcm().getFechaRegistro());
+				rcm.setRcmNombrede(rcmVO.getPago().getCobrador().getNombre());
+				rcm.setRcmObserv(rcmVO.getRcm().getObservacion());
+				rcm.setRcmRutCobrador(rcmVO.getPago().getCobrador().getRut()
+						.toString());
+				rcm.setTpdCodigo(new BigDecimal(rcmVO.getPago().getTipoPago()
+						.getId()));
+
+				List<Oa> oalist = new ArrayList<Oa>();
+				for (int i = 0; i < rcmVO.getOrdenes().size(); i++) {
+					Oa oa = new Oa();
+					oa.setOdaFolio(new BigDecimal(rcmVO.getOrdenes().get(i)
+							.getFolioOA()));
+					Query q = em
+							.createQuery("SELECT oa FROM Oa oa WHERE eoaDescripcion=:nombre");
+					q.setParameter("nombre", rcmVO.getOrdenes().get(i)
+							.getEstado());
+					EstadoOa eoa = (EstadoOa) q.getResultList().get(0);
+					oa.setEoaCodigo(eoa.getEoaCodigo());
+					oa.setOdaFechaemi(rcmVO.getOrdenes().get(i)
+							.getFechaEmision());
+					oa.setRcmFolio(new BigDecimal(rcmVO.getRcm().getFolio()));
+					oa.setTitRut(rcmVO.getOrdenes().get(i).getTitular()
+							.getRut().toString());
+					oalist.add(oa);
+				}
+				rcm.setOas(oalist);
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return rcm;
+	}
+
+	@Override
+	public void eliminarRcm(BigDecimal i) {
+	
+		//Primero, nos encargamos de las OA's asociadas a este RCM, des-asociándolas.
+		Query query = em.createQuery("UPDATE Oa SET rcmFolio=:nulo WHERE rcmFolio=:folio");
+		query.setParameter("nulo", null);
+		query.setParameter("folio", i);
+		int result = query.executeUpdate();
+		System.out.println("Modificadas: "+result+" ordenes de Atención");
+
+		//Luego, a borrar el RCM directamente
+		Query query2 = em.createQuery("DELETE Rcm WHERE rcmFolio=:folio");
+		query2.setParameter("folio", i);
+		int result2 = query2.executeUpdate();
+		System.out.println("Borradas: "+result2+" RCMS");
+		
 	}
 
 }

@@ -3,6 +3,9 @@ package com.redhat.masvida.vo;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "RcmVO")
 public class RcmVO implements Serializable {
 
 	private static final long serialVersionUID = -3450306769242381268L;

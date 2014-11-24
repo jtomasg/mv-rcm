@@ -20,4 +20,6 @@ public interface Rcm {
     OaVO buscarOaPorFolio(Integer id);
 
 	public void guardarRcm(RcmVO rcmVO) throws Exception;
+	
+	public void eliminarPorFolio(Integer folio);
 }

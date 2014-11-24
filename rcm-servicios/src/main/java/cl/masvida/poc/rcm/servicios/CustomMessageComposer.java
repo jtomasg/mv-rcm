@@ -77,17 +77,36 @@ public class CustomMessageComposer extends RESTEasyMessageComposer {
 			int id = Integer.parseInt(source.getParameters()[0].toString());
 			message.setContent(id);
 		}
-		
+
 		// Para buscar una Orden de Atención por ID....
-				if (source.getOperationName().equals("buscarOaPorFolio")) {
-					for (int i = 0; i < source.getParameters().length; i++) {
-						System.out.println("================== Param [" + i + "]: "
-								+ source.getParameters()[i]);
-					}
-					;
-					int id = Integer.parseInt(source.getParameters()[0].toString());
-					message.setContent(id);
-				}
+		if (source.getOperationName().equals("buscarOaPorFolio")) {
+			for (int i = 0; i < source.getParameters().length; i++) {
+				System.out.println("================== Param [" + i + "]: "
+						+ source.getParameters()[i]);
+			}
+			;
+			int id = Integer.parseInt(source.getParameters()[0].toString());
+			message.setContent(id);
+		}
+
+		if (source.getOperationName().equals("guardarRcm")) {
+			for (int i = 0; i < source.getParameters().length; i++) {
+				System.out.println("================== Param [" + i + "]: "
+						+ source.getParameters()[i]);
+			}
+			;
+		}
+
+		// Para eliminar un RCM via folio....
+		if (source.getOperationName().equals("eliminarPorFolio")) {
+			for (int i = 0; i < source.getParameters().length; i++) {
+				System.out.println("================== Param [" + i + "]: "
+						+ source.getParameters()[i]);
+			}
+			;
+			int id = Integer.parseInt(source.getParameters()[0].toString());
+			message.setContent(id);
+		}
 
 		return message;
 	}
