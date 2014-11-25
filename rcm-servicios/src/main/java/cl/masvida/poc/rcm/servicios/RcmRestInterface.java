@@ -1,6 +1,7 @@
 package cl.masvida.poc.rcm.servicios;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -9,6 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.redhat.masvida.vo.AgenciaVO;
+import com.redhat.masvida.vo.OaVO;
 import com.redhat.masvida.vo.RcmVO;
 import com.redhat.masvida.vo.TipoPagoVO;
 
@@ -19,6 +21,30 @@ public interface RcmRestInterface {
 	@Path("/buscar/{folio}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public RcmVO buscarPorFolio(@PathParam("folio") String folio
+			);
+	
+	@GET
+	@Path("/oa/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public OaVO buscarOaPorFolio(@PathParam("id") Integer id
+			);
+	
+	@GET
+	@Path("/tipopago/{tipopago}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String buscarTipoPago(@PathParam("tipopago") Integer tipopago
+			);
+	
+	@GET
+	@Path("/agencia/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String buscarAgencia(@PathParam("id") Integer id
+			);
+	
+	@GET
+	@Path("/eliminar/{folio}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void eliminarPorFolio(@PathParam("folio") String folio
 			);
 	
 	@GET

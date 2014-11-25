@@ -70,6 +70,7 @@ public class OrdenPagoMBean extends BaseManagedBean implements Serializable {
 	}
 
 	public void eliminarOA(AjaxBehaviorEvent event) {
+		System.out.println("Entrando a este método...");
 		// Verificamos la ROW ID correspondiente
 		Integer rowIndex = (Integer) event.getComponent().getAttributes()
 				.get("rowIndexId");
@@ -78,10 +79,10 @@ public class OrdenPagoMBean extends BaseManagedBean implements Serializable {
 
 		try {
 			// Simularemos una excepción a partir de un simble DivideByZero
-				Random r = new Random();
-				int rnumber = r.nextInt(2);
-				int result = 10 / rnumber;
-			
+			Random r = new Random();
+			int rnumber = r.nextInt(2);
+			int result = 10 / rnumber;
+
 			// Desvinculamos la OA del RCM
 			this.ordenes.remove(rowIndex.intValue());
 			actualizarDatosResumen();
@@ -126,7 +127,31 @@ public class OrdenPagoMBean extends BaseManagedBean implements Serializable {
 			// consultamos a los servicios
 			OrdenAtencionVO found = client.loadOrdenAtencion(ordenVo
 					.getFolioOA());
-			this.ordenes.set(rowIndex, found);
+
+			// Intentar añadir SOLO SI LA OA != null, sino, mostrará
+			// comportamiento extraño en la datatable.
+			if (found != null) {
+				int counter = 0;
+				for (OrdenAtencionVO obj : this.ordenes) {
+					if (obj.getFolioOA() == found.getFolioOA()) {
+						counter++;
+					}
+				}
+				if (counter == 1) {
+					this.ordenes.set(rowIndex, found);
+				} else {
+					// Evitar Crear OA's repetidas desde la Grilla.
+					this.ordenes.remove(rowIndex.intValue());
+					actualizarDatosResumen();
+					agregarNuevaOrdenAlFinal();
+				}
+			} else {
+				// Evitar Crear OA's desde la Grilla. Por ello, se admiten solo
+				// las pre-existentes en BD.
+				this.ordenes.remove(rowIndex.intValue());
+				actualizarDatosResumen();
+				agregarNuevaOrdenAlFinal();
+			}
 
 			JsfUtil.addMessage(event.getComponent().getClientId(),
 					"se ha cargado un folio OA");
